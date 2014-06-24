@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+
+  
+
+<hibernate-mapping package="tk.zater.CS">
+
+
+    <class name="FoodTable">
+    	<id name="id">
+    		<generator class="native"/>
+    	</id>
+    	<property name="memoId" not-null="true" length="10"/>
+    	<property name="foodStore" not-null="true" length="20"/>
+        <property name="foodTel" not-null="false" length="20"/>
+    	<property name="foodAddress" not-null="false" length="50"/>
+        <property name="foodTime" not-null="false" length="50"/>
+        <property name="foodRemark" not-null="false" length="50"/>
+    </class>
+
+</hibernate-mapping>

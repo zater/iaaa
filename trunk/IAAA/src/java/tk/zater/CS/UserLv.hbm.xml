@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+
+<hibernate-mapping package="tk.zater.CS">
+
+    <class name="UserLvTable">
+    	<id name="id">
+    		<generator class="native"/>
+    	</id>
+    	<property name="userTitle" not-null="true" length="10"/>
+    	<property name="Remark" not-null="false" length="20"/>
+       
+    </class>
+
+</hibernate-mapping>
