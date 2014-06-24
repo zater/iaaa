@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+
+  
+
+<hibernate-mapping package="tk.zater.CS">
+
+    
+    
+    <class name="PlanTable">
+    	<id name="id">
+    		<generator class="native"/>
+    	</id>
+    	<property name="userId" not-null="true" length="10"/>
+    	<property name="days" not-null="true" length="20"/>
+        <property name="topic" not-null="false" length="200"/>
+        <property name="abstracts" not-null="true" length="100"/>
+       <property name="characteristic" not-null="false" length="10"/>
+       <property name="price" not-null="true" length="10"/>
+       <property name="download" not-null="true" length="10"/>
+        <property name="score" not-null="true" length="10"/>
+    </class>
+
+</hibernate-mapping>
