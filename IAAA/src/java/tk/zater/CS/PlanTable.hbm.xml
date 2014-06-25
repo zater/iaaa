@@ -24,6 +24,7 @@
         <property name="score" not-null="true" length="10"/>
         <property name="cover" not-null="true" length="10"/>
          <property name="plantype" not-null="true" length="20"/>
+                <property name="gone" />
     </class>
 
 </hibernate-mapping>

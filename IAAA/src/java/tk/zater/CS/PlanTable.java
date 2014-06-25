@@ -13,7 +13,16 @@ public class PlanTable {
 	private double score;
         private String cover;
         private String plantype;
-                
+        private boolean gone;
+
+    public boolean isGone() {
+        return gone;
+    }
+
+    public void setGone(boolean gone) {
+        this.gone = gone;
+    }
+        
     public Integer getId() {
         return id;
     }
