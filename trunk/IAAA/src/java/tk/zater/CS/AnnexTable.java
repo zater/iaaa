@@ -1,16 +1,14 @@
 package tk.zater.CS;
 
-
 public class AnnexTable {
-	private Integer id;
-	private int planId;
-	private int memoId;
-	private int foodId;
-	private int pointId;
-	private int hotelId;
-	private byte cover;
-	private String annexName;
-	private String annexURL;
+
+    private Integer id;
+    private int planId;
+    private int memoId;
+    private int foodId;
+    private int pointId;
+    private int hotelId;
+    private String annexURL;
 
     public Integer getId() {
         return id;
@@ -60,23 +58,7 @@ public class AnnexTable {
         this.hotelId = hotelId;
     }
 
-    public byte getCover() {
-        return cover;
-    }
-
-    public void setCover(byte cover) {
-        this.cover = cover;
-    }
-
-
-
-    public String getAnnexName() {
-        return annexName;
-    }
-
-    public void setAnnexName(String annexName) {
-        this.annexName = annexName;
-    }
+   
 
     public String getAnnexURL() {
         return annexURL;
@@ -88,25 +70,22 @@ public class AnnexTable {
 
     @Override
     public String toString() {
-        return "AnnexTable{" + "id=" + id + ", planId=" + planId + ", memoId=" + memoId + ", foodId=" + foodId + ", pointId=" + pointId + ", hotelId=" + hotelId + ", cover=" + cover + ", annexName=" + annexName + ", annexURL=" + annexURL + '}';
+        return "AnnexTable{" + "id=" + id + ", planId=" + planId + ", memoId=" + memoId + ", foodId=" + foodId + ", pointId=" + pointId + ", hotelId=" + hotelId + ", annexURL=" + annexURL + '}';
     }
+
+   
 
     public AnnexTable() {
     }
 
-    public AnnexTable(int planId, int memoId, int foodId, int pointId, int hotelId, byte cover, String annexName, String annexURL) {
+    public AnnexTable(int planId, int memoId, int foodId, int pointId, int hotelId,  String annexURL) {
         this.planId = planId;
         this.memoId = memoId;
         this.foodId = foodId;
         this.pointId = pointId;
         this.hotelId = hotelId;
-        this.cover = cover;
-        this.annexName = annexName;
+      
         this.annexURL = annexURL;
     }
 
-   
-        
-        
-        
 }
