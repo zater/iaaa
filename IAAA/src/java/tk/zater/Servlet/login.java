@@ -45,7 +45,7 @@ public class login extends HttpServlet {
             searchuserQuery.setString("pwd", pwd);
             List<UserTable>user=searchuserQuery.list();
             if(user.size()!=0)
-            {
+            { out.print("{");
             out.print(user.get(0).getUserLv());
             }else{
             

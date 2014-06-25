@@ -9,7 +9,7 @@
     <property name="hibernate.connection.url">jdbc:mysql://120.110.112.182:8082/iaaa?zeroDateTimeBehavior=convertToNull</property>
     <property name="hibernate.connection.username">IAAA</property>
     <property name="hibernate.connection.password">IAAA</property>
-    <property name="hibernate.hbm2ddl.auto">create-drop</property>
+    <property name="hibernate.hbm2ddl.auto">update</property>
     <mapping resource="tk/zater/CS/UserTable.hbm.xml"/>
     <mapping resource="tk/zater/CS/PointTable.hbm.xml"/>
     <mapping resource="tk/zater/CS/PlanTable.hbm.xml"/>

@@ -39,18 +39,20 @@ public class reg extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
+
             try {
                 String accountName = request.getParameter("accountName");
-                out.println(accountName);
+                //out.println(accountName);
                 String pwd = request.getParameter("pwd");
                 String userName = request.getParameter("userName");
                 String email = request.getParameter("email");
                 Date addDate = new Date();
-                String address = request.getParameter("address");
-                String tel = request.getParameter("tel");
+
                 int userLv = 0;
                 int userScore = 0;
+
+                String address = request.getParameter("address");
+                String tel = request.getParameter("tel");
                 String inrtoduction = request.getParameter("inrtoduction");
                 UserTable usr = new UserTable(accountName, pwd, userName, email, addDate, address, tel, userLv, userScore, inrtoduction);
                 if ("".equals(accountName) || "".equals(pwd) || "".equals(email) || "".equals(userName)) {
@@ -61,14 +63,11 @@ public class reg extends HttpServlet {
                     out.print("密碼長度不正確");
                 } else {
                     Session sess = CreateHibernateServer.getSessionFactory().openSession();
-                    Query search = sess.createQuery("from UserTable where accountName=:accountname");
-                    search.setString("accountname", accountName);
-                    Iterator<UserTable> get = search.iterate();
-                    int i = 0;
-                    while (get.hasNext()) {
-                        i++;
-                    }
-                    if (i == 0) {
+                    Query searchuserQuery = sess.createQuery("from UserTable where accountName=:username");
+                    searchuserQuery.setString("username", accountName);
+                    List<UserTable> user = searchuserQuery.list();
+                     if(user.size()==0)
+                     {
                         Transaction tx = sess.beginTransaction();
                         sess.save(usr);
                         tx.commit();
@@ -84,10 +83,12 @@ public class reg extends HttpServlet {
             } catch (NullPointerException e) {
                 out.println("參數不正確！請不要嘗試破解");
             }
+
         }
+
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
