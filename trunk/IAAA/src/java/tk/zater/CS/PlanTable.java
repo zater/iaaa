@@ -11,7 +11,9 @@ public class PlanTable {
 	private int price;
         private int download;
 	private double score;
-
+        private String cover;
+        private String plantype;
+                
     public Integer getId() {
         return id;
     }
@@ -85,7 +87,27 @@ public class PlanTable {
         this.score = score;
     }
 
-    public PlanTable(Integer id, int userId, int days, String topic, String abstracts, String characteristic, int price, int download, double score) {
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
+    }
+
+    public String getPlantype() {
+        return plantype;
+    }
+
+    public void setPlantype(String plantype) {
+        this.plantype = plantype;
+    }
+
+   
+    public PlanTable() {
+    }
+
+    public PlanTable(Integer id, int userId, int days, String topic, String abstracts, String characteristic, int price, int download, double score, String cover, String plantype) {
         this.id = id;
         this.userId = userId;
         this.days = days;
@@ -95,8 +117,11 @@ public class PlanTable {
         this.price = price;
         this.download = download;
         this.score = score;
+        this.cover = cover;
+        this.plantype = plantype;
     }
 
+    
     @Override
     public String toString() {
         return "PlanTable{" + "id=" + id + ", userId=" + userId + ", days=" + days + ", topic=" + topic + ", abstracts=" + abstracts + ", characteristic=" + characteristic + ", price=" + price + ", download=" + download + ", score=" + score + '}';

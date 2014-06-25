@@ -22,6 +22,8 @@
        <property name="price" not-null="true" length="10"/>
        <property name="download" not-null="true" length="10"/>
         <property name="score" not-null="true" length="10"/>
+        <property name="cover" not-null="true" length="10"/>
+         <property name="plantype" not-null="true" length="20"/>
     </class>
 
 </hibernate-mapping>

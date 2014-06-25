@@ -42,9 +42,14 @@ public class pictureUpload extends HttpServlet {
             smart.initialize(this.getServletConfig(), request, response);
             smart.setAllowedFilesList(CreateHibernateServer.EnableFileUpload);
             smart.upload();
-            String FileName=new CreateFileName().GetName(request.getRemoteAddr());
-            String attachinfo=smart.getFiles().getFile(0).getFileExt();
-            smart.getFiles().getFile(0).saveAs(this.getServletContext().getRealPath("/")+CreateHibernateServer.uploadpath+File.separator+FileName);
+            String FileName = new CreateFileName().GetName(request.getRemoteAddr());
+            String attachinfo = smart.getFiles().getFile(0).getFileName();
+            String fileext[] = attachinfo.split("\\.");
+            if (!new File(this.getServletContext().getRealPath("/") +File.separator + CreateHibernateServer.uploadpath).exists()) {
+                new File(this.getServletContext().getRealPath("/")+File.separator  + CreateHibernateServer.uploadpath).mkdirs();
+            }
+            smart.getFiles().getFile(0).saveAs(this.getServletContext().getRealPath("/")+File.separator + CreateHibernateServer.uploadpath + File.separator + FileName + "." + fileext[1]);
+            out.println(FileName+ "." + fileext[1]);
         }
     }
 

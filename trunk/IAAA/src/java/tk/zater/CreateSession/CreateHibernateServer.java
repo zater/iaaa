@@ -20,6 +20,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
+
 /**
  *
  * @author zater
@@ -31,31 +32,21 @@ public class CreateHibernateServer extends HttpServlet {
     public static String EnableFileUpload;
     public static String uploadpath;
 
-    public void setupload(ServletConfig config) throws FileNotFoundException, IOException {
-        Properties prop = new Properties();
-        System.out.println(config.getServletContext().getRealPath("")+"\\conf.propeties");
-        prop.load(new FileInputStream(new File(config.getServletContext().getRealPath("")+"\\conf.propeties")));
-        EnableFileUpload = prop.getProperty("EnableFileUpload");
-        uploadpath = prop.getProperty("uploadpath");
+    public void init(ServletConfig config) throws ServletException {
+
+        super.init(config); //To change body of generated methods, choose Tools | Templates.
+        EnableFileUpload = config.getInitParameter("EnableFileUpload");
+        uploadpath = config.getInitParameter("uploadpath");
         System.out.println("-------------------------");
         System.out.println(EnableFileUpload);
-        System.out.println(uploadpath );
+        System.out.println(uploadpath);
+        buildSessionFactory();
+
     }
-
-    @Override
-    public void init(ServletConfig config) throws ServletException{
-        
-            super.init(config); //To change body of generated methods, choose Tools | Templates.
-           // setupload(config);
-            buildSessionFactory();
-       
-    }
-
-
 
     private static SessionFactory buildSessionFactory() {
-        Configuration conf=new Configuration().configure();
-        ServiceRegistry  sr=new ServiceRegistryBuilder().applySettings(conf.getProperties()).buildServiceRegistry();
+        Configuration conf = new Configuration().configure();
+        ServiceRegistry sr = new ServiceRegistryBuilder().applySettings(conf.getProperties()).buildServiceRegistry();
         sessionFactory = conf.buildSessionFactory(sr);
 
         return sessionFactory;
@@ -65,5 +56,4 @@ public class CreateHibernateServer extends HttpServlet {
         return sessionFactory;
     }
 
-   
 }
