@@ -66,7 +66,8 @@ function typecheck(x){
 function newsites() {
 	x = document.getElementById("allsite");
 	tag = document.createElement("select");
-	tag.name = "locationName"+(x.childElementCount/2 +1);
+	x.firstElementChild.value = parseInt(x.firstElementChild.value) + 1;
+	tag.name = "locationName"+(x.firstElementChild.value);
 	flag = ["基隆市","臺北市","新北市","桃園縣","新竹市","新竹縣","苗栗縣","臺中市","南投縣","彰化縣","雲林縣","嘉義市","嘉義縣","臺南市","高雄市","屏東縣","宜蘭縣","外島","其他"];
 	for(i = 0; i < flag.length; i++) {
 		tag2 = document.createElement("option");
@@ -85,7 +86,7 @@ function coverup(x){
 	http.send(fData);
 	http.onreadystatechange = function ()
   	{
-    	  if (http.readyState == 4 && http.status == 200) {
+    	if (http.readyState == 4 && http.status == 200) {
 			x.getElementsByTagName("input")[0].value=http.response;
 			x.getElementsByTagName("p")[1].innerHTML=http.response;
   	    }
@@ -93,12 +94,24 @@ function coverup(x){
 }
 function picup(x) {
 	fData = new FormData();
-	fData.append( 'file', x.getElementsByTagName("input")[1].files[0] );	
+	fData.append( 'file', x.getElementsByClassName("picfile")[0].files[0] );
 	http=new XMLHttpRequest();
 	http.open("POST","pictureUpload","true");
 	http.send(fData);
 	http.onreadystatechange = function (){
-		
+		if (http.readyState == 4 && http.status == 200) {
+			flag = x.firstElementChild;
+			x = x.getElementsByTagName("div")[0];
+			tag = document.createElement("input");
+			tag.type = "hidden";
+			tag.name = flag.name+"-pic"+flag.value+1;
+			tag.value = http.response;
+			flag.value++;
+			x.appendChild(tag);
+			tag = document.createElement("p");
+			tag.innerHTML += http.response+"<br>";
+			x.appendChild(tag);
+  	    }
 	}
 }
 function addeat(){
@@ -111,7 +124,7 @@ function addeat(){
 			y[i].name = x + "-" + y[i].name.split("-")[1]+"-"+z.value;
 		}
 	}
-	document.getElementById(x).innerHTML += document.getElementById("eatway").innerHTML;
+	document.getElementById(x).appendChild(document.getElementById("eatway").firstElementChild.cloneNode(true));
 }
 
 function addsite(){
@@ -124,7 +137,7 @@ function addsite(){
 			y[i].name = x + "-" + y[i].name.split("-")[1]+"-"+z.value;
 		}
 	}
-	document.getElementById(x).innerHTML += document.getElementById("siteway").innerHTML;
+	document.getElementById(x).appendChild(document.getElementById("siteway").firstElementChild.cloneNode(true));
 }
 
 function addpoint(){
@@ -137,7 +150,7 @@ function addpoint(){
 			y[i].name = x + "-" + y[i].name.split("-")[1]+"-"+z.value;
 		}
 	}
-	document.getElementById(x).innerHTML += document.getElementById("pointway").innerHTML;
+	document.getElementById(x).appendChild(document.getElementById("pointway").firstElementChild.cloneNode(true));
 }
 
 function delway(x){
@@ -210,11 +223,11 @@ function newday(){
 	tag.appendChild(tag2);
 	tag2 = document.createElement("div");
 	tag3 = document.createElement("img");
-	tag3.src = "move.png";
+	tag3.src = "webimage/move.png";
 	tag2.appendChild(tag3);
 	tag3 = document.createElement("input");
 	tag3.type = "text";
-	tag3.setAttribute("name","traffic");
+	tag3.setAttribute("name","day"+allpage+"-traffic");
 	tag2.appendChild(tag3);
 	tag.appendChild(tag2);
 	document.getElementById("step2main").appendChild(tag);
@@ -223,10 +236,10 @@ function newday(){
 </head>
 <body>
 <h1></h1>
-<form id = "main" method="GET" >
+<form id = "main" method="POST" >
 	<div id = "step1">
-		<p>標題<br><input type="text" name="label" required></p> 
-		<p>主題<br><input type="text" name="topic" required></p>
+		<p>標題<br><input type="text" name="topic" required></p> 
+		<p>主題<br><input type="text" name="plantype" required></p>
 		<p>特色<br><input type="text" name="characteristic" required></p>
 		<p>用途
 			<select onchange="opentag(this)">
@@ -235,7 +248,7 @@ function newday(){
  				<option selected="true" hidden>請選擇</option>
 			</select>
 			<span hidden>
-				金額：NT$<input class="paynum" type="text" name="pay" min="1" value = "1"  onchange="typecheck(this)" disabled>元
+				金額：NT$<input class="paynum" type="text" name="pay" min="1" value = "0"  onchange="typecheck(this)">元
 			</span>
 		</p>		
 		<p>季節限定<br>是<input type= "checkbox" onclick = "opentag(this)">
@@ -244,8 +257,9 @@ function newday(){
 				<input class="monthnum" type="number" name="month2" min="1" max="12" value = "12" onchange="typecheck(this)">月
 			</span>
 		</p>
-		<p>地點<br>
+		<p>地點<br>			
 			<div id = "allsite">
+			<input type="hidden" name="location" value="0">
 			</div>
 			<input type="button" value="新增" onclick = "newsites()">
 		</p>
@@ -261,16 +275,15 @@ function newday(){
 			<input type="button" onclick="coverup(this.parentNode)" value="上傳">
 		</div>
 		<br>
-		<input type="button" name="test" value = "完成，下一步" onclick="nextday()">
-		<input type="submit" value = "完成，下一步">
+		<input type="button" value = "完成，下一步" onclick="nextday()">
 	</div>
 	<div id = "step2" hidden>
 		<div id = "addmain">
-			<img src = "food.png" class = "imgbutton" onclick = "addeat()">
+			<img src = "webimage/food.png" class = "imgbutton" onclick = "addeat()">
 			<br>
-			<img src = "hotel.png" class = "imgbutton" onclick = "addsite()">
+			<img src = "webimage/hotel.png" class = "imgbutton" onclick = "addsite()">
 			<br>
-			<img src = "point.png" class = "imgbutton" onclick = "addpoint()">
+			<img src = "webimage/point.png" class = "imgbutton" onclick = "addpoint()">
 			<br>
 			<input type="button" value = "上一天" onclick = "reday()">
 			<br>

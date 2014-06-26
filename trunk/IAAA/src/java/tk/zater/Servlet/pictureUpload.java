@@ -49,7 +49,7 @@ public class pictureUpload extends HttpServlet {
                 new File(this.getServletContext().getRealPath("/")+File.separator  + CreateHibernateServer.uploadpath).mkdirs();
             }
             smart.getFiles().getFile(0).saveAs(this.getServletContext().getRealPath("/")+File.separator + CreateHibernateServer.uploadpath + File.separator + FileName + "." + fileext[1]);
-            out.println(FileName+ "." + fileext[1]);
+            out.println(File.separator + CreateHibernateServer.uploadpath + File.separator +FileName+ "." + fileext[1]);
         }
     }
 

@@ -37,6 +37,10 @@
         <servlet-name>GainInfo</servlet-name>
         <servlet-class>tk.zater.json.GainInfo</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>addTravel</servlet-name>
+        <servlet-class>tk.zater.Servlet.addTravel</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CreateHibernateServer</servlet-name>
         <url-pattern>/CreateHibernateServer</url-pattern>
@@ -64,6 +68,10 @@
     <servlet-mapping>
         <servlet-name>GainInfo</servlet-name>
         <url-pattern>/GainInfo</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>addTravel</servlet-name>
+        <url-pattern>/addTravel</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
