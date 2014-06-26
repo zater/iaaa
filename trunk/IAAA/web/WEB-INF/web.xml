@@ -53,6 +53,10 @@
         <servlet-name>PlanType</servlet-name>
         <servlet-class>tk.zater.Servlet.PlanType</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SetValue</servlet-name>
+        <servlet-class>tk.zater.Servlet.SetValue</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CreateHibernateServer</servlet-name>
         <url-pattern>/CreateHibernateServer</url-pattern>
@@ -96,6 +100,10 @@
     <servlet-mapping>
         <servlet-name>PlanType</servlet-name>
         <url-pattern>/PlanType</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SetValue</servlet-name>
+        <url-pattern>/SetValue</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -127,12 +127,12 @@ public class addTravel extends HttpServlet {
                 for (int j = 1; j <= pointcount; j++) {
                     String PointName = request.getParameter("day" + i + "-pointName-" + j);
                     String PointSummary = request.getParameter("day" + i + "-hotelTel-" + j);
-                    String pointNum = request.getParameter("day" + i + "-pointNum-" + j);
+                    
                     PointTable point = new PointTable();
                     point.setMemoId(memoID);
                     point.setPointName(PointName);
                     point.setPointSummary(PointSummary);
-                    point.setPointNum(Integer.parseInt(pointNum));
+                    point.setPointNum(j);
                     int hotelid = (int) session.save(point);
                     int piccount = Integer.parseInt(request.getParameter("day" + i + "-placepiccount-" + j));
                     for (int k = 1; k <= piccount; k++) {

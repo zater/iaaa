@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
-import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,7 +18,6 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import tk.zater.CS.LocationTable;
 import tk.zater.CS.PlanTable;
 import tk.zater.CreateSession.CreateHibernateServer;
 
@@ -55,7 +53,7 @@ public class Search extends HttpServlet {
                 StringBuffer buf = new StringBuffer("select l.id from PlanTable l where ");
                 boolean flag = false;
                 if (!"".equals(userid)) {
-                    buf.append(" userId=" + userid);
+                    buf.append(" l.userId=" + userid);
                     flag = true;
                 }
 
@@ -63,7 +61,7 @@ public class Search extends HttpServlet {
                     if (flag == true) {
                         buf.append(" and ");
                     }
-                    buf.append(" plantype= " + plantype);
+                    buf.append(" l.plantype= " + plantype);
                     flag = true;
                 }
 
@@ -71,14 +69,14 @@ public class Search extends HttpServlet {
                     if (flag == true) {
                         buf.append(" and ");
                     }
-                    buf.append(" pay<= " + pay);
+                    buf.append(" l.price <= " + pay);
                     flag = true;
                 }
                 if (!"".equals(score)) {
                     if (flag == true) {
                         buf.append(" and ");
                     }
-                    buf.append(" score>= " + score);
+                    buf.append(" l.score >= " + score);
                     flag = true;
                 }
                 Session sess = CreateHibernateServer.getSessionFactory().openSession();
