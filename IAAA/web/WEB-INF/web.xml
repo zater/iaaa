@@ -65,6 +65,10 @@
         <servlet-name>GainLatestTrip</servlet-name>
         <servlet-class>tk.zater.json.GainLatestTrip</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SearchUngone</servlet-name>
+        <servlet-class>tk.zater.json.SearchUngone</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CreateHibernateServer</servlet-name>
         <url-pattern>/CreateHibernateServer</url-pattern>
@@ -120,6 +124,10 @@
     <servlet-mapping>
         <servlet-name>GainLatestTrip</servlet-name>
         <url-pattern>/GainLatestTrip</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchUngone</servlet-name>
+        <url-pattern>/SearchUngone</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
