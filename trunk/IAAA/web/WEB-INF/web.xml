@@ -33,6 +33,10 @@
         <servlet-name>json</servlet-name>
         <servlet-class>tk.zater.Servlet.json</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>GainInfo</servlet-name>
+        <servlet-class>tk.zater.json.GainInfo</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CreateHibernateServer</servlet-name>
         <url-pattern>/CreateHibernateServer</url-pattern>
@@ -56,6 +60,10 @@
     <servlet-mapping>
         <servlet-name>json</servlet-name>
         <url-pattern>/json</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GainInfo</servlet-name>
+        <url-pattern>/GainInfo</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
