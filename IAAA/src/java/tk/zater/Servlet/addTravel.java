@@ -7,21 +7,23 @@ package tk.zater.Servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
+import java.io.Serializable;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import tk.zater.CS.UserTable;
+import org.hibernate.Transaction;
+import tk.zater.CS.MemoTable;
+import tk.zater.CS.PlanTable;
+import tk.zater.CS.PointTable;
 import tk.zater.CreateSession.CreateHibernateServer;
 
 /**
  *
  * @author zater
  */
-public class login extends HttpServlet {
+public class addTravel extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,24 +38,38 @@ public class login extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            String username = request.getParameter("accountName");
-            String pwd = request.getParameter("pwd");
-            Session sess = CreateHibernateServer.getSessionFactory().openSession();
-            Query searchuserQuery = sess.createQuery("from UserTable where accountName=:username and pwd=:pwd");
-            searchuserQuery.setString("username", username);
-            searchuserQuery.setString("pwd", pwd);
-            List<UserTable>user=searchuserQuery.list();
-            if(user.size()!=0)
-            {
-            out.print(user.get(0).getUserLv());
-            request.setAttribute("Username", username);
-            request.setAttribute("userid", user.get(0).getId());
-            }else{
-            
-            out.print("fail");
-            
+            Session session = CreateHibernateServer.getSessionFactory().openSession();
+            Transaction tx = session.beginTransaction();
+            PlanTable plan = new PlanTable();
+            plan.setTopic(request.getParameter("topic"));
+            plan.setDays(Integer.parseInt(request.getParameter("Days")));
+            plan.setDownload(0);
+            plan.setScore(0);
+            plan.setAbstracts(request.getParameter("abstract"));
+            plan.setPlantype(request.getParameter("plantype"));
+            plan.setCover(request.getParameter("cover"));
+            plan.setCharacteristic(request.getParameter("characteristic"));
+            String userid = null;
+            try {
+                userid = (String) request.getAttribute("userid");
+            } catch (Exception e) {
+                out.println("請先登錄");
+                return;
             }
+            if (userid == null) {
+                out.println("請先登錄");
+                return;
+            }
+            if (userid.matches("\\d+")) {
+                plan.setUserId(Integer.parseInt((String) request.getAttribute("userid")));
+            } else {
+
+                out.println("請先登錄");
+                return;
+            }
+            int planid = (int) session.save(plan);
+            tx.commit();
+            out.println(planid);
         }
     }
 
