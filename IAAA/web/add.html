@@ -1,0 +1,301 @@
+﻿<!doctype html>
+<html lang="zh-tw">
+<head>
+<meta charset="utf-8">
+<title>上架</title>
+<style>
+	#main #step1  {margin-left:30%}
+	#main #step1 span {margin-left:1%}
+	#step1 .monthnum {width:3em}
+	#step1 .paynum {width:8em;text-align:center}
+	#addmain {display:inline;float:left;border-style:solid;margin-left:20%}
+	#step2main {}
+	#step2main h1 {text-align: center}
+	.maintag {border-style:solid;float:left}
+	.imgbutton {border-style:outset;}
+	.imgbutton:active {border-style:inset}
+</style>
+<script>
+var page = 0;
+var allpage = 0;
+function opentag(x){
+	if(x.type == "checkbox") {
+		if(x.checked){
+			document.getElementById("main").getElementsByTagName("span")[1].hidden = false;
+		} else {
+			document.getElementById("main").getElementsByTagName("span")[1].hidden = true;	
+		}
+	} else {
+		if(x.value == "上架"){
+			document.getElementById("main").getElementsByTagName("span")[0].getElementsByTagName("input")[0].disabled = false;
+			document.getElementById("main").getElementsByTagName("span")[0].hidden = false;
+		} else {
+			document.getElementById("main").getElementsByTagName("span")[0].getElementsByTagName("input")[0].disabled = true;
+			document.getElementById("main").getElementsByTagName("span")[0].hidden = true;	
+		}
+	}
+}
+
+function typecheck(x){
+	if(x.value > 12 && x.name != "Days" && x.name != "pay"){
+		x.value = "12";
+	} 
+	if(x.value < 1){
+		x.value = "1";
+	} 
+	if(x.name == "pay"){
+		x.value = x.value.replace(/\,/g,"");
+		if(isNaN(x.value)){
+			 x.value = 1;
+		}
+		if(x.value.length > 3) {
+			flag = "";
+			tag = 0;
+			while(tag != x.value.length){
+				tag++;
+				flag = x.value.charAt(x.value.length-tag) + flag;
+				if(tag % 3 == 0 && tag != x.value.length) {
+					flag = "," + flag;
+				}
+			}
+			x.value = flag;
+		}
+	}
+}
+
+function newsites() {
+	x = document.getElementById("allsite");
+	tag = document.createElement("select");
+	tag.name = "locationName"+(x.childElementCount/2 +1);
+	flag = ["基隆市","臺北市","新北市","桃園縣","新竹市","新竹縣","苗栗縣","臺中市","南投縣","彰化縣","雲林縣","嘉義市","嘉義縣","臺南市","高雄市","屏東縣","宜蘭縣","外島","其他"];
+	for(i = 0; i < flag.length; i++) {
+		tag2 = document.createElement("option");
+		tag2.value = flag[i]
+		tag2.innerHTML = flag[i];
+		tag.appendChild(tag2);
+	}
+	x.appendChild(tag);
+	x.appendChild(document.createElement("br"));
+}
+
+function photoup(){
+	//tag = "photoup.html?tag=" + x;
+        //window.open(tag);
+	http=new XMLHttpRequest();
+	http.open("POST","pictureUpload","true");
+	http.send(document.getElementById( 'file' ).files[0]);
+}
+
+function addeat(){
+	x = "day" + page;
+	y =  document.getElementById("eatway").getElementsByTagName("input");
+	z = document.getElementsByName("day" + page + "-eatcount")[0];
+	z.value = parseInt(z.value)+1;
+	for(i = 0; i < y.length; i++) {
+		if(y[i].name!="") {
+			y[i].name = x + "-" + y[i].name.split("-")[1]+"-"+z.value;
+		}
+	}
+	document.getElementById(x).innerHTML += document.getElementById("eatway").innerHTML;
+}
+
+function addsite(){
+	x = "day" + page;
+	y =  document.getElementById("siteway").getElementsByTagName("input");
+	z = document.getElementsByName("day" + page + "-sitecount")[0];
+	z.value = parseInt(z.value)+1;
+	for(i = 0; i < y.length; i++) {
+		if(y[i].name!="") {
+			y[i].name = x + "-" + y[i].name.split("-")[1]+"-"+z.value;
+		}
+	}
+	document.getElementById(x).innerHTML += document.getElementById("siteway").innerHTML;
+}
+
+function addpoint(){
+	x = "day" + page;
+	y =  document.getElementById("pointway").getElementsByTagName("input");
+	z = document.getElementsByName("day" + page + "-pointcount")[0];
+	z.value = parseInt(z.value)+1;
+	for(i = 0; i < y.length; i++) {
+		if(y[i].name!="") {
+			y[i].name = x + "-" + y[i].name.split("-")[1]+"-"+z.value;
+		}
+	}
+	document.getElementById(x).innerHTML += document.getElementById("pointway").innerHTML;
+}
+
+function delway(x){
+	y = "day" + page;
+	document.getElementById(y).removeChild(x.parentNode);
+}
+function modway(x){
+	x = x.parentNode.getElementsByTagName("span")[0];
+	if(x.style.display == "none"){
+		x.style.display = "block";
+		x.parentNode.getElementsByTagName("input")[0].readOnly = false;
+	} else {
+		x.style.display = "none";
+		x.parentNode.getElementsByTagName("input")[0].readOnly = true;
+	}
+}
+function nextday(){
+	if(page == document.getElementsByName("Days")[0].value)
+	{
+		return false;
+	} 
+	page++;
+	if(page==1){
+		document.getElementById("step1").hidden = true;
+		document.getElementById("step2").hidden = false;
+	}
+	if(page > allpage) {
+		newday();
+	}
+	x = document.getElementById("step2main").children;
+	for(var i = 0; i < x.length; i++) {
+		x[i].hidden = true;
+	}
+	document.getElementById("day"+page).hidden = false;
+	if(page == document.getElementsByName("Days")[0].value)
+	{
+		document.getElementById("addmain").lastElementChild.disabled = false;
+		document.getElementById("addmain").children[document.getElementById("addmain").childElementCount-3].disabled = true;
+	} 			
+}
+function reday(){
+	page--;
+	if(page==0){
+		document.getElementById("step2").hidden = true;
+		document.getElementById("step1").hidden = false;
+	} else {
+		x = document.getElementById("step2main").children;
+		for(var i = 0; i < x.length; i++) {
+			x[i].hidden = true;
+		}
+		document.getElementById("day"+page).hidden = false;
+	}
+}
+function newday(){
+	allpage += 1;
+	tag = document.createElement("div");
+	tag.id = "day" + allpage;
+	tag2 = document.createElement("h1");
+	tag2.innerHTML = "第"+allpage+"天";
+	tag.appendChild(tag2);
+	tag2 = document.createElement("input");
+	tag2.type = "hidden";
+	tag2.name = "day"+allpage+"-eatcount";
+	tag2.value = 0;
+	tag.appendChild(tag2);
+	tag2 = document.createElement("input");
+	tag2.type = "hidden";
+	tag2.name = "day"+allpage+"-sitecount";
+	tag2.value = 0;
+	tag.appendChild(tag2);
+	tag2 = document.createElement("input");
+	tag2.type = "hidden";
+	tag2.name = "day"+allpage+"-pointcount";
+	tag2.value = 0;
+	tag.appendChild(tag2);
+	tag2 = document.createElement("div");
+	tag3 = document.createElement("img");
+	tag3.src = "move.png";
+	tag2.appendChild(tag3);
+	tag3 = document.createElement("input");
+	tag3.type = "text";
+	tag3.setAttribute("name","traffic");
+	tag2.appendChild(tag3);
+	tag.appendChild(tag2);
+	document.getElementById("step2main").appendChild(tag);
+}
+</script>
+</head>
+<body>
+<h1></h1>
+<form id = "main" method="GET" >
+	<div id = "step1">
+		<p>標題<br><input type="text" name="label" required></p> 
+		<p>主題<br><input type="text" name="topic" required></p>
+		<p>特色<br><input type="text" name="characteristic" required></p>
+		<p>用途
+			<select onchange="opentag(this)">
+				<option>上架</option>
+ 				<option>分享</option>
+ 				<option selected="true" hidden>請選擇</option>
+			</select>
+			<span hidden>
+				金額：NT$<input class="paynum" type="text" name="pay" min="1" value = "1"  onchange="typecheck(this)" disabled>元
+			</span>
+		</p>		
+		<p>季節限定<br>是<input type= "checkbox" onclick = "opentag(this)">
+			<span hidden>
+				<input class="monthnum" type="number" name="month1" min="1" max="12" value = "1"  onchange="typecheck(this)">月~
+				<input class="monthnum" type="number" name="month2" min="1" max="12" value = "12" onchange="typecheck(this)">月
+			</span>
+		</p>
+		<p>地點<br>
+			<div id = "allsite">
+			</div>
+			<input type="button" value="新增" onclick = "newsites()">
+		</p>
+		<p>時間長度<input class="monthnum" type="number" name="Days" min="1" value = "1" onchange="typecheck(this)">天</p>
+		<p>簡介<br><textarea name="abstract" cols="40" rows="5" required></textarea></p>
+		<p>行程<br><textarea name="memo" cols="40" rows="5" required></textarea></p>
+		<input type="button" onclick="photoup('A')" value="封面上傳">
+		<input type="file" id = "file">
+		<input type="button" value = "完成，下一步" onclick="nextday()">
+	</div>
+	<div id = "step2" hidden>
+		<div id = "addmain">
+			<img src = "food.png" class = "imgbutton" onclick = "addeat()">
+			<br>
+			<img src = "hotel.png" class = "imgbutton" onclick = "addsite()">
+			<br>
+			<img src = "point.png" class = "imgbutton" onclick = "addpoint()">
+			<br>
+			<input type="button" value = "上一天" onclick = "reday()">
+			<br>
+			<input type="button" value = "下一天" onclick = "nextday()">
+			<br>
+			<input type="submit" value = "送出" disabled>
+		</div>
+		<span id = "step2main">
+			
+		</span>
+	</div>
+</form>
+<div id = "eatway" hidden>
+	<div class = "maintag">
+	美食店名<br><input type = "text" name = "o-foodStore"><br>
+		<span>
+		美食連絡電話<br><input type = "text" name = "o-foodTel"><br>
+		美食店址<br><input type = "text" name = "o-foodAddress"><br>
+		美食營業時間<br><input type = "text" name = "o-foodTime"><br>
+		美食備註<br><input type = "text" name = "o-foodRemark">	<br>
+		</span>
+	<input type="button" value= "展開/收合" onclick = "modway(this)">
+	<input type="button" value= "刪除" onclick = "delway(this)"></div>
+</div>
+<div id = "siteway" hidden>
+	<div class = "maintag">
+	住宿店名<br><input type = "text" name = "o-hotel"><br>
+		<span>
+		住宿連絡電話<br><input type = "text" name = "o-hotelTel"><br>
+		住宿地址<br><input type = "text" name = "o-hotelAddress"><br>
+		住宿備註<br><input type = "text" name = "o-hotelRemark"><br>
+		</span>
+	<input type="button" value= "展開/收合" onclick = "modway(this)">
+	<input type="button" value= "刪除" onclick = "delway(this)"></div>
+</div>
+<div id = "pointway" hidden>
+	<div class = "maintag">
+	景點名稱<br><input type = "text" name = "o-pointName"><br>
+		<span>
+		景點說明<br><input type = "text" name = "o-pointNum"><br>
+		</span>
+	<input type="button" value= "展開/收合" onclick = "modway(this)">
+	<input type="button" value= "刪除" onclick = "delway(this)"></div>
+</div>
+</body>
+</html>
