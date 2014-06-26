@@ -10,6 +10,10 @@ public class AnnexTable {
     private int hotelId;
     private String annexURL;
 
+    public AnnexTable(String annexURL) {
+        this.annexURL = annexURL;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -78,14 +82,6 @@ public class AnnexTable {
     public AnnexTable() {
     }
 
-    public AnnexTable(int planId, int memoId, int foodId, int pointId, int hotelId,  String annexURL) {
-        this.planId = planId;
-        this.memoId = memoId;
-        this.foodId = foodId;
-        this.pointId = pointId;
-        this.hotelId = hotelId;
-      
-        this.annexURL = annexURL;
-    }
+    
 
 }
