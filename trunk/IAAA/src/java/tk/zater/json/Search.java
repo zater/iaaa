@@ -85,7 +85,7 @@ public class Search extends HttpServlet {
                 Query qr = sess.createQuery(buf.toString());
                 a = qr.iterate();
 
-            }
+            } 
             if (!"".equals(locationName)) {
                 Session sess = CreateHibernateServer.getSessionFactory().openSession();
                 Query qr = sess.createQuery("select l.planId from LocationTable l where locationName=:name");
