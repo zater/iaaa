@@ -86,13 +86,21 @@ function coverup(x){
 	http.onreadystatechange = function ()
   	{
     	  if (http.readyState == 4 && http.status == 200) {
-			alert(http.response);
 			x.getElementsByTagName("input")[0].value=http.response;
-			x.getElementsByTagName("p")[0].innerHTML=http.response;
+			x.getElementsByTagName("p")[1].innerHTML=http.response;
   	    }
  	};
 }
-
+function picup(x) {
+	fData = new FormData();
+	fData.append( 'file', x.getElementsByTagName("input")[1].files[0] );	
+	http=new XMLHttpRequest();
+	http.open("POST","pictureUpload","true");
+	http.send(fData);
+	http.onreadystatechange = function (){
+		
+	}
+}
 function addeat(){
 	x = "day" + page;
 	y =  document.getElementById("eatway").getElementsByTagName("input");
@@ -164,11 +172,6 @@ function nextday(){
 		x[i].hidden = true;
 	}
 	document.getElementById("day"+page).hidden = false;
-	if(page == document.getElementsByName("Days")[0].value)
-	{
-		document.getElementById("addmain").lastElementChild.disabled = false;
-		document.getElementById("addmain").children[document.getElementById("addmain").childElementCount-3].disabled = true;
-	} 			
 }
 function reday(){
 	page--;
@@ -253,12 +256,13 @@ function newday(){
 			<p>封面</p>
 			<input type="hidden" name = "cover">
 			<p></p>
-			<input type="file" id = "file">
+			<input type="file">
 			<br>
 			<input type="button" onclick="coverup(this.parentNode)" value="上傳">
 		</div>
 		<br>
-		<input type="button" value = "完成，下一步" onclick="nextday()">
+		<input type="button" name="test" value = "完成，下一步" onclick="nextday()">
+		<input type="submit" value = "完成，下一步">
 	</div>
 	<div id = "step2" hidden>
 		<div id = "addmain">
@@ -272,44 +276,66 @@ function newday(){
 			<br>
 			<input type="button" value = "下一天" onclick = "nextday()">
 			<br>
-			<input type="submit" value = "送出" disabled>
+			<input type="submit" value = "送出">
 		</div>
 		<span id = "step2main">
-			
 		</span>
 	</div>
 </form>
 <div id = "eatway" hidden>
 	<div class = "maintag">
-	美食店名<br><input type = "text" name = "o-foodStore"><br>
+		美食店名<br><input type = "text" name = "o-foodStore"><br>
 		<span>
-		美食連絡電話<br><input type = "text" name = "o-foodTel"><br>
-		美食店址<br><input type = "text" name = "o-foodAddress"><br>
-		美食營業時間<br><input type = "text" name = "o-foodTime"><br>
-		美食備註<br><input type = "text" name = "o-foodRemark">	<br>
+			美食連絡電話<br><input type = "text" name = "o-foodTel"><br>
+			美食店址<br><input type = "text" name = "o-foodAddress"><br>
+			美食營業時間<br><input type = "text" name = "o-foodTime"><br>
+			美食備註<br><input type = "text" name = "o-foodRemark">	<br>
+			<div>
+				<input type="hidden" name = "o-foodpiccount" value = "0">
+				<div></div>
+				<input type="file" class="picfile">
+				<br>
+				<input type="button" onclick="picup(this.parentNode)" value="上傳">
+			</div>
 		</span>
 	<input type="button" value= "展開/收合" onclick = "modway(this)">
 	<input type="button" value= "刪除" onclick = "delway(this)"></div>
 </div>
 <div id = "siteway" hidden>
 	<div class = "maintag">
-	住宿店名<br><input type = "text" name = "o-hotel"><br>
+		住宿店名<br><input type = "text" name = "o-hotel"><br>
 		<span>
-		住宿連絡電話<br><input type = "text" name = "o-hotelTel"><br>
-		住宿地址<br><input type = "text" name = "o-hotelAddress"><br>
-		住宿備註<br><input type = "text" name = "o-hotelRemark"><br>
+			住宿連絡電話<br><input type = "text" name = "o-hotelTel"><br>
+			住宿地址<br><input type = "text" name = "o-hotelAddress"><br>
+			住宿備註<br><input type = "text" name = "o-hotelRemark"><br>
+			<div>
+				<input type="hidden" name = "o-hotelpiccount" value = "0">
+				<div></div>
+				<input type="file" class="picfile">
+				<br>
+				<input type="button" onclick="picup(this.parentNode)" value="上傳">
+			</div>
 		</span>
-	<input type="button" value= "展開/收合" onclick = "modway(this)">
-	<input type="button" value= "刪除" onclick = "delway(this)"></div>
+		<input type="button" value= "展開/收合" onclick = "modway(this)">
+		<input type="button" value= "刪除" onclick = "delway(this)">
+	</div>
 </div>
 <div id = "pointway" hidden>
 	<div class = "maintag">
-	景點名稱<br><input type = "text" name = "o-pointName"><br>
+		景點名稱<br><input type = "text" name = "o-pointName"><br>
 		<span>
-		景點說明<br><input type = "text" name = "o-pointNum"><br>
+			景點說明<br><input type = "text" name = "o-pointNum"><br>
+			<div>
+				<input type="hidden" name = "o-placepiccount" value = "0">
+				<div></div>
+				<input type="file" class="picfile">
+				<br>
+				<input type="button" onclick="picup(this.parentNode)" value="上傳">
+			</div>
 		</span>
-	<input type="button" value= "展開/收合" onclick = "modway(this)">
-	<input type="button" value= "刪除" onclick = "delway(this)"></div>
+		<input type="button" value= "展開/收合" onclick = "modway(this)">
+		<input type="button" value= "刪除" onclick = "delway(this)">
+	</div>
 </div>
 </body>
 </html>
