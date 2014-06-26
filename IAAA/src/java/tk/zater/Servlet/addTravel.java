@@ -114,7 +114,7 @@ public class addTravel extends HttpServlet {
                     String Hotelname = request.getParameter("day" + i + "-hotel-" + j);
                     String HotelTel = request.getParameter("day" + i + "-hotelTel-" + j);
                     String Hoteladdress = request.getParameter("day" + i + "-hotelAddress-" + j);
-                    String HotelRemark = request.getParameter("day" + i + "-hotelAddress-" + j);
+                    String HotelRemark = request.getParameter("day" + i + "-hotelRemark-" + j);
                     HotelTable hotel = new HotelTable();
                     hotel.setHotelAddress(Hoteladdress);
                     hotel.setHotelName(Hotelname);
@@ -140,11 +140,11 @@ public class addTravel extends HttpServlet {
                     point.setPointName(PointName);
                     point.setPointSummary(PointSummary);
                     point.setPointNum(j);
-                    int hotelid = (int) session.save(point);
+                    int placecount = (int) session.save(point);
                     int piccount = Integer.parseInt(request.getParameter("day" + i + "-placepiccount-" + j));
                     for (int k = 1; k <= piccount; k++) {
                         AnnexTable photo = new AnnexTable();
-                        photo.setHotelId(hotelid);
+                        photo.setPointId(placecount);
                         photo.setAnnexURL(request.getParameter("day" + i + "-placepiccount-" + j + "-pic" + k));
                         session.save(photo);
                     }

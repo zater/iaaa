@@ -112,6 +112,7 @@ public class Search extends HttpServlet {
             }
 
             JSONObject output = new JSONObject();
+            JSONArray ans=new JSONArray();
             while (c.hasNext()) {
 
                 Session sess = CreateHibernateServer.getSessionFactory().openSession();
@@ -136,9 +137,10 @@ public class Search extends HttpServlet {
                 qr = sess.createQuery("select l.locationName from LocationTable l where planid=:id");
                 qr.setInteger("id", plan.get(0).getId());
                 JSONArray location = JSONArray.fromObject(qr.list());
-                output.put("plan",planObject);
-                output.put("locaition",location);
-            }
+                ans.add(planObject);
+                ans.add(location);
+            } 
+            output.put("location", ans);
             out.println(output);
         }
     }

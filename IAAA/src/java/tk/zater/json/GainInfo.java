@@ -58,7 +58,7 @@ public class GainInfo extends HttpServlet {
             qr.list();
             planObject.put("UserID", qr.list().get(0));
             planObject.put("Topic", pl.getTopic());
-            
+             planObject.put("plantype", pl.getPlantype());
             planObject.put("Days", pl.getDays());
             planObject.put("Price", pl.getPrice());
             planObject.put("Score", pl.getScore());
