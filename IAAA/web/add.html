@@ -104,9 +104,9 @@ function picup(x) {
 			x = x.getElementsByTagName("div")[0];
 			tag = document.createElement("input");
 			tag.type = "hidden";
-			tag.name = flag.name+"-pic"+Integer(flag.value)+1;
-			tag.value = http.response;
 			flag.value++;
+			tag.name = flag.name+"-pic"+flag.value;
+			tag.value = http.response;
 			x.appendChild(tag);
 			tag = document.createElement("p");
 			tag.innerHTML += http.response+"<br>";
