@@ -7,10 +7,12 @@ package tk.zater.json;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import tk.zater.CS.PlanTable;
 
 /**
  *
@@ -36,8 +38,11 @@ public class Search extends HttpServlet {
             String userid = request.getParameter("userId");
             String locationName = request.getParameter("locationName");
             String plantype = request.getParameter("plantype");
+            String  score = request.getParameter("score");
             String pay = request.getParameter("pay");
-            if (!("".equals(userid) || "".equals(pay) || "".equals(plantype))) {
+            Iterator<PlanTable>a;
+            Iterator<PlanTable>b;
+            if (!("".equals(userid) && "".equals(pay) && "".equals(plantype) && "".equals(score))) {
                 StringBuffer buf = new StringBuffer("from PlanTable where ");
                 boolean flag = false;
                 if (!"".equals(userid)) {
@@ -60,7 +65,13 @@ public class Search extends HttpServlet {
                     buf.append(" pay<= " + pay);
                     flag = true;
                 }
-                out.println(buf.toString());
+                if (!"".equals(score)) {
+                    if (flag == true) {
+                        buf.append(" and ");
+                    }
+                    buf.append(" pay<= " + pay);
+                    flag = true;
+                }
             }
         }
     }
