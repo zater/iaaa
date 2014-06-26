@@ -16,7 +16,6 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import tk.zater.CS.AnnexTable;
 import tk.zater.CS.FoodTable;
 import tk.zater.CS.HotelTable;
 import tk.zater.CS.MemoTable;

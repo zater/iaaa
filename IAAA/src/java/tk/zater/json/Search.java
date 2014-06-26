@@ -8,11 +8,20 @@ package tk.zater.json;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import tk.zater.CS.LocationTable;
 import tk.zater.CS.PlanTable;
+import tk.zater.CreateSession.CreateHibernateServer;
 
 /**
  *
@@ -38,18 +47,18 @@ public class Search extends HttpServlet {
             String userid = request.getParameter("userId");
             String locationName = request.getParameter("locationName");
             String plantype = request.getParameter("plantype");
-            String  score = request.getParameter("score");
+            String score = request.getParameter("score");
             String pay = request.getParameter("pay");
-            Iterator<PlanTable>a;
-            Iterator<PlanTable>b;
+            Iterator<Integer> a = null;
+            Iterator<Integer> b = null;
             if (!("".equals(userid) && "".equals(pay) && "".equals(plantype) && "".equals(score))) {
-                StringBuffer buf = new StringBuffer("from PlanTable where ");
+                StringBuffer buf = new StringBuffer("select l.id from PlanTable l where ");
                 boolean flag = false;
                 if (!"".equals(userid)) {
                     buf.append(" userId=" + userid);
                     flag = true;
                 }
- 
+
                 if (!"".equals(plantype)) {
                     if (flag == true) {
                         buf.append(" and ");
@@ -69,10 +78,66 @@ public class Search extends HttpServlet {
                     if (flag == true) {
                         buf.append(" and ");
                     }
-                    buf.append(" pay<= " + pay);
+                    buf.append(" score>= " + score);
                     flag = true;
                 }
+                Session sess = CreateHibernateServer.getSessionFactory().openSession();
+                Query qr = sess.createQuery(buf.toString());
+                a = qr.iterate();
+
             }
+            if (!"".equals(locationName)) {
+                Session sess = CreateHibernateServer.getSessionFactory().openSession();
+                Query qr = sess.createQuery("select l.planId from LocationTable l where locationName=:name");
+                qr.setString("name", locationName);
+                b = qr.iterate();
+            }
+
+            Iterator<Integer> c;
+            if (a == null) {
+                c = b;
+            } else if (b == null) {
+                c = a;
+            } else {
+                TreeSet<Integer> ansset = new TreeSet<>();
+                TreeSet<Integer> aset = new TreeSet();
+                while (a.hasNext()) {
+                    aset.add(a.next());
+                }
+                while (b.hasNext()) {
+                    int id = b.next();
+                    if (aset.contains(id)) {
+                        ansset.add(id);
+                    }
+                }
+                c = ansset.iterator();
+            }
+
+            JSONArray output = new JSONArray();
+            while (c.hasNext()) {
+
+                Session sess = CreateHibernateServer.getSessionFactory().openSession();
+                Query qr = sess.createQuery("from PlanTable where id=:id");
+                qr.setInteger("id", c.next());
+                List<PlanTable> plan = qr.list();
+                PlanTable pl = plan.get(0);
+                JSONObject planObject = new JSONObject();
+                planObject.put("Characteristic", pl.getCharacteristic());
+                planObject.put("Abstracts", pl.getAbstracts());
+                planObject.put("Cover", pl.getCover());
+                qr = sess.createQuery("select l.accountName from UserTable l where id=:id");
+                qr.setInteger("id", pl.getUserId());
+                qr.list();
+                planObject.put("UserID", qr.list().get(0));
+                planObject.put("Topic", pl.getTopic());
+
+                planObject.put("Days", pl.getDays());
+                planObject.put("Price", pl.getPrice());
+                planObject.put("Score", pl.getScore());
+                planObject.put("Download", pl.getDownload());
+                output.add(planObject);
+            }
+            out.println(output);
         }
     }
 
