@@ -3,25 +3,25 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package tk.zater.json;
+package tk.zater.Servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import net.sf.json.JSONArray;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import tk.zater.CS.plantype;
 import tk.zater.CreateSession.CreateHibernateServer;
 
 /**
  *
  * @author zater
  */
-public class Gainplantype extends HttpServlet {
+public class PlanType extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,11 +36,12 @@ public class Gainplantype extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-           Session sess = CreateHibernateServer.getSessionFactory().openSession();
-            Query qr = sess.createQuery("Select p.typename from plantype p");
-        
-            out.println(    JSONArray.fromObject(qr.list()));
-                   
+            Session sess = CreateHibernateServer.getSessionFactory().openSession();
+            Query qr = sess.createQuery("from plantype");
+            List<plantype> p = qr.list();
+            for (int i=0;i<p.size();i++) {
+                out.print(p.get(i).getTypename());
+            }
         }
     }
 
