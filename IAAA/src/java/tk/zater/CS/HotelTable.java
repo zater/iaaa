@@ -57,6 +57,9 @@ public class HotelTable {
         this.htotelRemark = htotelRemark;
     }
 
+    public HotelTable() {
+    }
+
     public HotelTable(Integer id, int memoId, String hotelName, String hotelTel, String hotelAddress, String htotelRemark) {
         this.id = id;
         this.memoId = memoId;

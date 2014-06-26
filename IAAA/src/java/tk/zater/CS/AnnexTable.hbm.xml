@@ -11,8 +11,7 @@
         </id>
         <property name="planId" not-null="true" length="10"/>
         <property name="memoId" not-null="false" length="20"/>
-        <property name="foodId" not-null="false" length="10"/>
-        <property name="pointId" not-null="false" length="20"/>
+        <property name="foodId" not-null="false" length="10"/
         <property name="hotelId" not-null="false" length="10"/>
         <property name="annexURL" not-null="true" length="50"/>
     </class>

@@ -77,13 +77,20 @@ function newsites() {
 	x.appendChild(tag);
 	x.appendChild(document.createElement("br"));
 }
-
-function photoup(){
-	//tag = "photoup.html?tag=" + x;
-        //window.open(tag);
+function coverup(x){
+	fData = new FormData();
+	fData.append( 'file', x.getElementsByTagName("input")[1].files[0] );	
 	http=new XMLHttpRequest();
 	http.open("POST","pictureUpload","true");
-	http.send(document.getElementById( 'file' ).files[0]);
+	http.send(fData);
+	http.onreadystatechange = function ()
+  	{
+    	  if (http.readyState == 4 && http.status == 200) {
+			alert(http.response);
+			x.getElementsByTagName("input")[0].value=http.response;
+			x.getElementsByTagName("p")[0].innerHTML=http.response;
+  	    }
+ 	};
 }
 
 function addeat(){
@@ -242,8 +249,15 @@ function newday(){
 		<p>時間長度<input class="monthnum" type="number" name="Days" min="1" value = "1" onchange="typecheck(this)">天</p>
 		<p>簡介<br><textarea name="abstract" cols="40" rows="5" required></textarea></p>
 		<p>行程<br><textarea name="memo" cols="40" rows="5" required></textarea></p>
-		<input type="button" onclick="photoup('A')" value="封面上傳">
-		<input type="file" id = "file">
+		<div>
+			<p>封面</p>
+			<input type="hidden" name = "cover">
+			<p></p>
+			<input type="file" id = "file">
+			<br>
+			<input type="button" onclick="coverup(this.parentNode)" value="上傳">
+		</div>
+		<br>
 		<input type="button" value = "完成，下一步" onclick="nextday()">
 	</div>
 	<div id = "step2" hidden>
