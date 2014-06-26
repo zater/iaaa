@@ -17,6 +17,7 @@ import org.hibernate.Transaction;
 import tk.zater.CS.AnnexTable;
 import tk.zater.CS.FoodTable;
 import tk.zater.CS.HotelTable;
+import tk.zater.CS.LocationTable;
 import tk.zater.CS.MemoTable;
 import tk.zater.CS.MonthTable;
 import tk.zater.CS.PlanTable;
@@ -42,6 +43,7 @@ public class addTravel extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            request.setCharacterEncoding("UTF-8");
             Session session = CreateHibernateServer.getSessionFactory().openSession();
             Transaction tx = session.beginTransaction();
             PlanTable plan = new PlanTable();
@@ -77,10 +79,15 @@ public class addTravel extends HttpServlet {
             for (int i = month1; i <= month2; i++) {
                 session.save(new MonthTable(planid, i));
             }
+            int location = Integer.parseInt(request.getParameter("location"));
 
+            for (int i = 1; i <= location; i++) {
+                LocationTable locationTable = new LocationTable(planid, request.getParameter("locationName" + i));
+                session.save(locationTable);
+            }
             for (int i = 1; i <= Integer.parseInt(request.getParameter("Days")); i++) {
                 String memo = request.getParameter("day" + i + "-memo");
-                String traffic = request.getParameter("day" + i + "traffic");
+                String traffic = request.getParameter("day" + i + "-traffic");
                 MemoTable memoday = new MemoTable(planid, i, memo, traffic);
                 int memoID = (int) session.save(memoday);
                 int eatcount = Integer.parseInt(request.getParameter("day" + i + "-eatcount"));
@@ -127,7 +134,7 @@ public class addTravel extends HttpServlet {
                 for (int j = 1; j <= pointcount; j++) {
                     String PointName = request.getParameter("day" + i + "-pointName-" + j);
                     String PointSummary = request.getParameter("day" + i + "-hotelTel-" + j);
-                    
+
                     PointTable point = new PointTable();
                     point.setMemoId(memoID);
                     point.setPointName(PointName);
