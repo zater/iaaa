@@ -150,6 +150,7 @@ function addpoint(){
 			y[i].name = x + "-" + y[i].name.split("-")[1]+"-"+z.value;
 		}
 	}
+	document.getElementById("pointway").getElementsByTagName("textarea")[0].name = x + "-pointSummary-"+z.value;
 	document.getElementById(x).appendChild(document.getElementById("pointway").firstElementChild.cloneNode(true));
 }
 
@@ -236,7 +237,6 @@ function newday(){
 	tag3 = document.createElement("textarea");
 	tag3.cols = "40";
 	tag3.rows = "5";
-	tag3.required = "true";
 	tag3.name = "day"+allpage+"-memo";
 	tag2.appendChild(tag3);
 	tag.appendChild(tag2);
@@ -256,7 +256,7 @@ function step1select(x){
 </head>
 <body>
 <h1></h1>
-<form id = "main" method="POST" >
+<form id = "main" method="POST" action="addTravel">
 	<div id = "step1">
 		<p>標題<br><input type="text" name="topic" required></p> 
 		<p>主題<br>
@@ -366,7 +366,7 @@ function step1select(x){
 	<div class = "maintag">
 		景點名稱<br><input type = "text" name = "o-pointName"><br>
 		<span>
-			景點說明<br><textarea name = "o-pointNum" cols="40" rows = "5"></textarea><br>
+			景點說明<br><textarea name = "o-pointSummary" cols="40" rows = "5"></textarea><br>
 			<div>
 				<input type="hidden" name = "o-placepiccount" value = "0">
 				<div></div>
