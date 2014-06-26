@@ -104,7 +104,7 @@ function picup(x) {
 			x = x.getElementsByTagName("div")[0];
 			tag = document.createElement("input");
 			tag.type = "hidden";
-			tag.name = flag.name+"-pic"+flag.value+1;
+			tag.name = flag.name+"-pic"+Integer(flag.value)+1;
 			tag.value = http.response;
 			flag.value++;
 			x.appendChild(tag);
@@ -227,10 +227,30 @@ function newday(){
 	tag2.appendChild(tag3);
 	tag3 = document.createElement("input");
 	tag3.type = "text";
-	tag3.setAttribute("name","day"+allpage+"-traffic");
+	tag3.name = "day"+allpage+"-traffic";
+	tag2.appendChild(tag3);
+	tag.appendChild(tag2);
+	tag2 = document.createElement("p");
+	tag2.innerHTML = "簡介";
+	tag2.appendChild(document.createElement("br"));
+	tag3 = document.createElement("textarea");
+	tag3.cols = "40";
+	tag3.rows = "5";
+	tag3.required = "true";
+	tag3.name = "day"+allpage+"-memo";
 	tag2.appendChild(tag3);
 	tag.appendChild(tag2);
 	document.getElementById("step2main").appendChild(tag);
+}
+
+function step1select(x){
+	if(x.selectedOptions[0].innerHTML != "其他") {
+		x.parentNode.lastElementChild.hidden = true;
+		x.parentNode.lastElementChild.value = x.selectedOptions[0].innerHTML;
+	} else {
+		x.parentNode.lastElementChild.hidden = false;
+		x.parentNode.lastElementChild.value = "";
+	}
 }
 </script>
 </head>
@@ -239,7 +259,15 @@ function newday(){
 <form id = "main" method="POST" >
 	<div id = "step1">
 		<p>標題<br><input type="text" name="topic" required></p> 
-		<p>主題<br><input type="text" name="plantype" required></p>
+		<p>主題<br>
+			<div>
+				<select onchange="step1select(this)">
+					<option>文化之旅</option>
+					<option selected="true">其他</option>
+				</select>
+				<input type="text" name="plantype" required>
+			</div>
+		</p>
 		<p>特色<br><input type="text" name="characteristic" required></p>
 		<p>用途
 			<select onchange="opentag(this)">
@@ -264,8 +292,6 @@ function newday(){
 			<input type="button" value="新增" onclick = "newsites()">
 		</p>
 		<p>時間長度<input class="monthnum" type="number" name="Days" min="1" value = "1" onchange="typecheck(this)">天</p>
-		<p>簡介<br><textarea name="abstract" cols="40" rows="5" required></textarea></p>
-		<p>行程<br><textarea name="memo" cols="40" rows="5" required></textarea></p>
 		<div>
 			<p>封面</p>
 			<input type="hidden" name = "cover">
@@ -274,6 +300,9 @@ function newday(){
 			<br>
 			<input type="button" onclick="coverup(this.parentNode)" value="上傳">
 		</div>
+		<br>
+		<p>旅遊簡介</p>
+		<textarea name = "abstract" cols="40" rows = "5"></textarea>
 		<br>
 		<input type="button" value = "完成，下一步" onclick="nextday()">
 	</div>
@@ -337,7 +366,7 @@ function newday(){
 	<div class = "maintag">
 		景點名稱<br><input type = "text" name = "o-pointName"><br>
 		<span>
-			景點說明<br><input type = "text" name = "o-pointNum"><br>
+			景點說明<br><textarea name = "o-pointNum" cols="40" rows = "5"></textarea><br>
 			<div>
 				<input type="hidden" name = "o-placepiccount" value = "0">
 				<div></div>

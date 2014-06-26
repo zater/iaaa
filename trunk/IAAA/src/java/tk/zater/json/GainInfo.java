@@ -54,8 +54,12 @@ public class GainInfo extends HttpServlet {
             planObject.put("Characteristic", pl.getCharacteristic());
             planObject.put("Abstracts", pl.getAbstracts());
             planObject.put("Cover", pl.getCover());
-            planObject.put("UserID", pl.getUserId());
+            qr = sess.createQuery("select l.accountName from UserTable l where id=:id");
+            qr.setInteger("id", pl.getUserId());
+            qr.list();
+            planObject.put("UserID", qr.list().get(0));
             planObject.put("Topic", pl.getTopic());
+            
             planObject.put("Days", pl.getDays());
             planObject.put("Price", pl.getPrice());
             planObject.put("Score", pl.getScore());
