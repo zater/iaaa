@@ -50,9 +50,12 @@ public class Search extends HttpServlet {
             Iterator<Integer> a = null;
             Iterator<Integer> b = null;
             if (!("".equals(userid) && "".equals(pay) && "".equals(plantype) && "".equals(score))) {
-                StringBuffer buf = new StringBuffer("select l.id from PlanTable l where ");
-                boolean flag = false;
+                StringBuffer buf = new StringBuffer("select l.id from PlanTable l where gone=false ");
+                boolean flag = true;
                 if (!"".equals(userid)) {
+                    if (flag == true) {
+                        buf.append(" and ");
+                    }
                     buf.append(" l.userId=" + userid);
                     flag = true;
                 }
@@ -116,7 +119,7 @@ public class Search extends HttpServlet {
             while (c.hasNext()) {
 
                 Session sess = CreateHibernateServer.getSessionFactory().openSession();
-                Query qr = sess.createQuery("from PlanTable where id=:id");
+                Query qr = sess.createQuery("from PlanTable where id=:id and gone=false");
                 qr.setInteger("id", c.next());
                 List<PlanTable> plan = qr.list();
                 PlanTable pl = plan.get(0);

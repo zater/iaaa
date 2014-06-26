@@ -57,6 +57,14 @@
         <servlet-name>SetValue</servlet-name>
         <servlet-class>tk.zater.Servlet.SetValue</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SetGone</servlet-name>
+        <servlet-class>tk.zater.Servlet.SetGone</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GainLatestTrip</servlet-name>
+        <servlet-class>tk.zater.json.GainLatestTrip</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CreateHibernateServer</servlet-name>
         <url-pattern>/CreateHibernateServer</url-pattern>
@@ -104,6 +112,14 @@
     <servlet-mapping>
         <servlet-name>SetValue</servlet-name>
         <url-pattern>/SetValue</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SetGone</servlet-name>
+        <url-pattern>/SetGone</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GainLatestTrip</servlet-name>
+        <url-pattern>/GainLatestTrip</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

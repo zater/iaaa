@@ -51,6 +51,13 @@ public class addTravel extends HttpServlet {
             plan.setDays(Integer.parseInt(request.getParameter("Days")));
             plan.setDownload(0);
             plan.setScore(0);
+            int price = Integer.parseInt(request.getParameter("pay"));
+            plan.setPrice(price);
+            if (price != 0) {
+                plan.setGone(true);
+            } else {
+                plan.setGone(false);
+            }
             plan.setAbstracts(request.getParameter("abstract"));
             plan.setPlantype(request.getParameter("plantype"));
             plan.setCover(request.getParameter("cover"));
