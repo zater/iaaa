@@ -46,6 +46,10 @@ function typecheck(x){
 		if(isNaN(x.value)){
 			 x.value = 1;
 		}
+		if(parseInt(x.value) < 1){
+			x.value = "1";
+		} 
+		x.value = parseInt(x.value);
 		if(x.value.length > 3) {
 			flag = "";
 			tag = 0;
@@ -250,11 +254,15 @@ function step1select(x){
 		x.parentNode.lastElementChild.value = "";
 	}
 }
+
+function checksubmit(){
+	document.forms[0].pay.value = document.forms[0].pay.value.replace(/\,/g,"");
+}
 </script>
 </head>
 <body>
 <h1></h1>
-<form id = "main" method="POST" action="addTravel">
+<form id = "main" method="POST" action="addTravel" onsubmit="return checksubmit()">
 	<div id = "step1">
 		<p>標題<br><input type="text" name="topic" required></p> 
 		<p>主題<br>

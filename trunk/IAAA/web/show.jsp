@@ -36,6 +36,10 @@
             Query qr = sess.createQuery("from PlanTable where id=:id");
             qr.setInteger("id", index);
             List<PlanTable> plan = qr.list();
+			if(plan.size()==0){
+			out.println("您的内容被服务器吃掉了");
+			return;
+			}
         %>
 
         簡介<%=plan.get(0).getAbstracts()%><br>
