@@ -15,130 +15,85 @@
 	.imgbutton {border-style:outset;}
 	.imgbutton:active {border-style:inset}
 </style>
-<script src = "webimage/jquery-1.11.1.min.js"></script>
 <script>
-$(document).ready(function(){
-	$("[hidden]").hide(1);
-});
-// step1 start
-	function opentag(x){ // step1表格控制
-		if(x.type == "checkbox") {
-			$(x).next().toggle();
-		} else {
-			$(x).next().toggle();
-			if($(x).val() == "分享") {
-				$(x).next().children(":first").val("0");
-			}
-		}
-	}
-
-	function typecheck(x){ // step1金額、季節、時間長度的上下限
-		if(x.value > 12 && x.name != "Days" && x.name != "pay"){
-			x.value = "12";
-		} 
-		if(x.value < 1){
-			x.value = "1";
-		} 
-		if(x.name == "pay"){
-			x.value = x.value.replace(/\,/g,"");
-			if(isNaN(x.value)){
-				 x.value = 1;
-			}
-			if(parseInt(x.value) < 1){
-				x.value = "1";
-			} 
-			x.value = parseInt(x.value);
-			if(x.value.length > 3) {
-				flag = "";
-				tag = 0;
-				while(tag != x.value.length){
-					tag++;
-					flag = x.value.charAt(x.value.length-tag) + flag;
-					if(tag % 3 == 0 && tag != x.value.length) {
-						flag = "," + flag;
-					}
-				}
-				x.value = flag;
-			}
-		}
-	}
-
-	function payfocus(x){ // step1 金額格式轉換
-		x.value = x.value.replace(/\,/g,"");
-	}
-	function newsites() { // step1 地點新增
-		$("#allsite").children(":first").val(parseInt($("#allsite").children(":first").val())+1)
-		tag = document.createElement("select");
-		tag.name = "locationName"+ $("#allsite").children(":first").val();
-		flag = ["基隆市","臺北市","新北市","桃園縣","新竹市","新竹縣","苗栗縣","臺中市","南投縣","彰化縣","雲林縣","嘉義市","嘉義縣","臺南市","高雄市","屏東縣","宜蘭縣","花蓮縣","澎湖縣","金門縣","連江縣","其他"];
-		for(i = 0; i < flag.length; i++) {
-			tag2 = document.createElement("option");
-			tag2.value = flag[i]
-			tag2.innerHTML = flag[i];
-			tag.appendChild(tag2);
-		}
-		$("#allsite").append(tag);
-		$("#allsite").append(document.createElement("br"));
-	}
-	
-	function coverup(x){ // step1 封面
-		fData = new FormData();
-		fData.append( 'file', $(x).parent().children(":file")[0].files[0] );	
-		$.ajax({
-			url: 'pictureUpload',  //Server script to process data
-			type: 'POST',
-			data: fData,
-			cache: false,
-			contentType: false,
-			processData: false,
-			success:function(res){
-				$(x).parent().children("input:first").val(res);
-				$(x).parent().children("p:last").html(res);
-			}
-		});
-	}
-	function step1select(x){ // step1 主題選擇
-		if($(x).children("option:selected").val() != "其他") {
-			$(x).next().hide();
-			$(x).next().val($(x).children("option:selected").val());
-		} else {
-			$(x).next().show();
-			$(x).next().val("");
-		}
-	}
-
-	function openstep2(){ // step1表格檢查
-		flag = true;
-		for( i = 0; i < $("#step1 :text").length; i++){
-			x = $("#step1 :text")[i];
-			if($.trim(x.value) == ""){
-				$(x).parent().children("span").show();
-				flag = false;
-			} else {
-				$(x).parent().children("span").hide();
-			}
-		}
-		if($("#allsite select").length == 0) {
-			$("#allsite").parent().children("span:first").show();
-			flag = false;
-		} else {
-			$("#allsite").parent().children("span:first").hide();
-		}
-		if($.trim($("#step1 textarea").val()) == "") {
-			$("#step1 textarea").parent().children("span").show();
-			flag = false;
-		} else {
-			$("#step1 textarea").parent().children("span").hide();
-		}
-		if(flag == true){
-			alert("a");
-		}
-	}
-// step1 end
-// step2
 var page = 0;
 var allpage = 0;
+function opentag(x){
+	if(x.type == "checkbox") {
+		if(x.checked){
+			document.getElementById("main").getElementsByTagName("span")[1].hidden = false;
+		} else {
+			document.getElementById("main").getElementsByTagName("span")[1].hidden = true;	
+		}
+	} else {
+		if(x.value == "上架"){
+			document.getElementById("main").getElementsByTagName("span")[0].hidden = false;
+		} else {
+			document.getElementById("main").getElementsByTagName("span")[0].hidden = true;	
+		}
+	}
+}
 
+function typecheck(x){
+	if(x.value > 12 && x.name != "Days" && x.name != "pay"){
+		x.value = "12";
+	} 
+	if(x.value < 1){
+		x.value = "1";
+	} 
+	if(x.name == "pay"){
+		x.value = x.value.replace(/\,/g,"");
+		if(isNaN(x.value)){
+			 x.value = 1;
+		}
+		if(parseInt(x.value) < 1){
+			x.value = "1";
+		} 
+		x.value = parseInt(x.value);
+		if(x.value.length > 3) {
+			flag = "";
+			tag = 0;
+			while(tag != x.value.length){
+				tag++;
+				flag = x.value.charAt(x.value.length-tag) + flag;
+				if(tag % 3 == 0 && tag != x.value.length) {
+					flag = "," + flag;
+				}
+			}
+			x.value = flag;
+		}
+	}
+}
+
+function newsites() {
+	x = document.getElementById("allsite");
+	tag = document.createElement("select");
+	x.firstElementChild.value = parseInt(x.firstElementChild.value) + 1;
+	tag.name = "locationName"+(x.firstElementChild.value);
+	flag = ["基隆市","臺北市","新北市","桃園縣","新竹市","新竹縣","苗栗縣","臺中市","南投縣","彰化縣","雲林縣","嘉義市","嘉義縣","臺南市","高雄市","屏東縣","宜蘭縣","花蓮縣","澎湖縣","金門縣","連江縣","其他"];
+	for(i = 0; i < flag.length; i++) {
+		tag2 = document.createElement("option");
+		tag2.value = flag[i]
+		tag2.innerHTML = flag[i];
+		tag.appendChild(tag2);
+	}
+	x.appendChild(tag);
+	x.appendChild(document.createElement("br"));
+}
+function coverup(x){
+	fData = new FormData();
+	fData.append( 'file', x.getElementsByTagName("input")[1].files[0] );	
+	http=new XMLHttpRequest();
+	http.open("POST","pictureUpload","true");
+	http.send(fData);
+	http.onreadystatechange = function ()
+  	{
+    	if (http.readyState == 4 && http.status == 200) {
+			x.getElementsByTagName("input")[0].value=http.response;
+			x.getElementsByTagName("p")[1].innerHTML=http.response;
+  	    }
+ 	};
+}
 function picup(x) {
 	fData = new FormData();
 	fData.append( 'file', x.getElementsByClassName("picfile")[0].files[0] );
@@ -247,37 +202,87 @@ function reday(){
 		document.getElementById("day"+page).hidden = false;
 	}
 }
+function newday(){
+	allpage += 1;
+	tag = document.createElement("div");
+	tag.id = "day" + allpage;
+	tag2 = document.createElement("h1");
+	tag2.innerHTML = "第"+allpage+"天";
+	tag.appendChild(tag2);
+	tag2 = document.createElement("input");
+	tag2.type = "hidden";
+	tag2.name = "day"+allpage+"-eatcount";
+	tag2.value = 0;
+	tag.appendChild(tag2);
+	tag2 = document.createElement("input");
+	tag2.type = "hidden";
+	tag2.name = "day"+allpage+"-sitecount";
+	tag2.value = 0;
+	tag.appendChild(tag2);
+	tag2 = document.createElement("input");
+	tag2.type = "hidden";
+	tag2.name = "day"+allpage+"-pointcount";
+	tag2.value = 0;
+	tag.appendChild(tag2);
+	tag2 = document.createElement("div");
+	tag3 = document.createElement("img");
+	tag3.src = "webimage/move.png";
+	tag2.appendChild(tag3);
+	tag3 = document.createElement("input");
+	tag3.type = "text";
+	tag3.name = "day"+allpage+"-traffic";
+	tag2.appendChild(tag3);
+	tag.appendChild(tag2);
+	tag2 = document.createElement("p");
+	tag2.innerHTML = "簡介";
+	tag2.appendChild(document.createElement("br"));
+	tag3 = document.createElement("textarea");
+	tag3.cols = "40";
+	tag3.rows = "5";
+	tag3.name = "day"+allpage+"-memo";
+	tag2.appendChild(tag3);
+	tag.appendChild(tag2);
+	document.getElementById("step2main").appendChild(tag);
+}
+
+function step1select(x){
+	if(x.selectedOptions[0].innerHTML != "其他") {
+		x.parentNode.lastElementChild.hidden = true;
+		x.parentNode.lastElementChild.value = x.selectedOptions[0].innerHTML;
+	} else {
+		x.parentNode.lastElementChild.hidden = false;
+		x.parentNode.lastElementChild.value = "";
+	}
+}
 
 function checksubmit(){
 	document.forms[0].pay.value = document.forms[0].pay.value.replace(/\,/g,"");
 }
-
-function newday(){
-	
-}
-// step2 end
 </script>
 </head>
 <body>
 <h1></h1>
 <form id = "main" method="POST" action="addTravel" onsubmit="return checksubmit()">
 	<div id = "step1">
-		<p>標題<span style="color:red" hidden>請填寫此值</span><br><input type="text" name="topic"></p> 
-		<p>主題<span style="color:red" hidden>請填寫此值</span><br>
-			<select onchange="step1select(this)">
-				<option>文化之旅</option>
-				<option selected="true">其他</option>
-			</select>
-			<input type="text" name="plantype">
+		<p>標題<br><input type="text" name="topic" required></p> 
+		<p>主題<br>
+			<div>
+				<select onchange="step1select(this)">
+					<option>文化之旅</option>
+					<option selected="true">其他</option>
+				</select>
+				<input type="text" name="plantype" required>
+			</div>
 		</p>
-		<p>特色<span style="color:red" hidden>請填寫此值</span><br><input type="text" name="characteristic"></p>
+		<p>特色<br><input type="text" name="characteristic" required></p>
 		<p>用途
 			<select onchange="opentag(this)">
 				<option>上架</option>
- 				<option selected>分享</option>
+ 				<option>分享</option>
+ 				<option selected="true" hidden>請選擇</option>
 			</select>
 			<span hidden>
-				金額：NT$<input class="paynum" type="text" name="pay" min="1" value = "0"  onchange="typecheck(this)" onfocus="payfocus(this)">元
+				金額：NT$<input class="paynum" type="text" name="pay" min="1" value = "0"  onchange="typecheck(this)">元
 			</span>
 		</p>		
 		<p>季節限定<br>是<input type= "checkbox" onclick = "opentag(this)">
@@ -286,10 +291,10 @@ function newday(){
 				<input class="monthnum" type="number" name="month2" min="1" max="12" value = "12" onchange="typecheck(this)">月
 			</span>
 		</p>
-		<p>地點<span style="color:red" hidden>請新增地點</span><br>			
-			<span id = "allsite">
+		<p>地點<br>			
+			<div id = "allsite">
 			<input type="hidden" name="location" value="0">
-			</span>
+			</div>
 			<input type="button" value="新增" onclick = "newsites()">
 		</p>
 		<p>時間長度<input class="monthnum" type="number" name="Days" min="1" value = "1" onchange="typecheck(this)">天</p>
@@ -297,16 +302,15 @@ function newday(){
 			<p>封面</p>
 			<input type="hidden" name = "cover">
 			<p></p>
-			<input type="file" >
+			<input type="file">
 			<br>
-			<input type="button" onclick="coverup(this)" value="上傳">
+			<input type="button" onclick="coverup(this.parentNode)" value="上傳">
 		</div>
 		<br>
-		<p>旅遊簡介<span style="color:red" hidden>請填寫此值</span><br>
-			<textarea name = "abstract" cols="40" rows = "5"></textarea>
-		</p>
+		<p>旅遊簡介</p>
+		<textarea name = "abstract" cols="40" rows = "5"></textarea>
 		<br>
-		<input type="button" value = "完成，下一步" onclick="openstep2()">
+		<input type="button" value = "完成，下一步" onclick="nextday()">
 	</div>
 	<div id = "step2" hidden>
 		<div id = "addmain">
@@ -326,9 +330,8 @@ function newday(){
 		</span>
 	</div>
 </form>
-
-<div id = "eatdiv" hidden>
-	<div class = "eatclass">
+<div id = "eatway" hidden>
+	<div class = "maintag">
 		美食店名<br><input type = "text" name = "o-foodStore"><br>
 		<span>
 			美食連絡電話<br><input type = "text" name = "o-foodTel"><br>
@@ -346,9 +349,8 @@ function newday(){
 	<input type="button" value= "展開/收合" onclick = "modway(this)">
 	<input type="button" value= "刪除" onclick = "delway(this)"></div>
 </div>
-
-<div id = "sitediv" hidden>
-	<div class = "siteclass">
+<div id = "siteway" hidden>
+	<div class = "maintag">
 		住宿店名<br><input type = "text" name = "o-hotel"><br>
 		<span>
 			住宿連絡電話<br><input type = "text" name = "o-hotelTel"><br>
@@ -366,9 +368,8 @@ function newday(){
 		<input type="button" value= "刪除" onclick = "delway(this)">
 	</div>
 </div>
-
-<div id = "pointdiv" hidden>
-	<div class = "pointclass">
+<div id = "pointway" hidden>
+	<div class = "maintag">
 		景點名稱<br><input type = "text" name = "o-pointName"><br>
 		<span>
 			景點說明<br><textarea name = "o-pointSummary" cols="40" rows = "5"></textarea><br>
@@ -384,21 +385,5 @@ function newday(){
 		<input type="button" value= "刪除" onclick = "delway(this)">
 	</div>
 </div>
-
-<div id = "newdaydiv" hidden>
-	<div class  = "newdayclass">
-		<h1></h1>
-		<input type="hidden" name="o-eatcount" value="0">
-		<input type="hidden" name="o-sitecount" value="0">
-		<input type="hidden" name="o-eatcount" value="0">
-		<input type="hidden" name="o-pointcount" value="0">
-		<div>
-			<img src = "webimage/move.png">
-			<input type="text" name="o-traffic">
-		</div>
-		<p>簡介<br><textarea name = "o-memo" cols="40" rows = "5"></textarea></p>			
-	</div>
-</div>
-
 </body>
 </html>
