@@ -113,7 +113,7 @@ public class addTravel extends HttpServlet {
                     for (int k = 1; k <= piccount; k++) {
                         AnnexTable photo = new AnnexTable();
                         photo.setFoodId(foodid);
-                        photo.setAnnexURL(request.getParameter("day" + i + "-foodpiccount-" + j + "-pic" + k));
+                        photo.setAnnexURL(request.getParameter("day" + i + "-foodpiccount-" +"pic" + k+"-"+j));
                         session.save(photo);
                     }
                 }
@@ -133,7 +133,7 @@ public class addTravel extends HttpServlet {
                     for (int k = 1; k <= piccount; k++) {
                         AnnexTable photo = new AnnexTable();
                         photo.setHotelId(hotelid);
-                        photo.setAnnexURL(request.getParameter("day" + i + "-hotelpiccount-" + j + "-pic" + k));
+                        photo.setAnnexURL(request.getParameter("day" + i + "-hotelpiccount-" +"pic" + k+"-"+j));
                         session.save(photo);
                     }
                 }
@@ -152,7 +152,7 @@ public class addTravel extends HttpServlet {
                     for (int k = 1; k <= piccount; k++) {
                         AnnexTable photo = new AnnexTable();
                         photo.setPointId(placecount);
-                        photo.setAnnexURL(request.getParameter("day" + i + "-placepiccount-" + j + "-pic" + k));
+                        photo.setAnnexURL(request.getParameter("day" + i + "-placepiccount-" +"pic" + k+"-"+j));
                         session.save(photo);
                     }
                 }

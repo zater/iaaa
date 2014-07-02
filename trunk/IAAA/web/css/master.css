@@ -1,0 +1,56 @@
+﻿body
+ {
+    width:90%;
+    padding: 0px;
+    overflow-x:hidden; /*讓橫捲軸隱藏起來*/
+    overflow-y:auto;
+    background-color:#dee8eb;
+    margin: 0 auto; /* 兩側的自動值與寬度結合後，版面便會置中對齊。 */
+    
+ }
+ 
+ header {
+	width:100%;
+	background:#f2f2f2;
+	position:relative; 
+	z-index:2;
+}
+
+.row-top {
+	width:100%;
+	padding:10px 0;
+	background:#000;
+	
+}
+
+h1 {
+	padding:0px 0 0 10px; 
+	float:left;
+}
+	h1 a {
+		display:inline-block;
+		font-size:50px;
+		font-weight:normal;
+		line-height:1.4em;
+		color:#fff;
+		letter-spacing:-3px;
+		margin-top:-10px;
+	}
+		h1 a span {color:#c52e02}
+		
+.wrapper {width:100%; overflow:hidden;}
+.extra-wrap {overflow:hidden;}
+nav{padding-left:60%;}
+
+/****************************footer************************/
+footer {
+	width:100%; 
+	padding:23px 0 30px;
+	color:#fff;
+}
+	footer a {color:#c42e02;}
+	footer span {display:block;}
+	footer .main {font-size:14px; line-height:25px;}
+
+
+
