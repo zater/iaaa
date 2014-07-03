@@ -72,6 +72,7 @@ public class reg extends HttpServlet {
                         tx.commit();
                         out.println("成功");
                         sess.close();
+                        response.sendRedirect("tripindex.html");
                     } else {
 
                         out.println("用戶名被註冊");
