@@ -8,20 +8,20 @@
 	#main #step1 span {margin-left:1%}
 	#step1 .monthnum {width:3em}
 	#step1 .paynum {width:8em;text-align:center}
-	#addmain {display:inline;float:left;border-style:solid;margin-left:15%}
-	#step2main h1 {text-align: center}
+	#addmain {display:inline;float:left;border-style:solid;margin-left:15%;background-color:#FFEE99;border-radius:5px;border-color:#FFDD55;}
+	#step2main h1 {text-align: center;font-family:微軟正黑體;color:#666666;}
 	#step2main h2 {text-align: center;color:red}
-	.newdayclass {float:left;width : 70%}
-	.newdayclass>div{ text-align:center;border-style:solid;}
-	.pointclass {border-style:solid;float:left}
+	.newdayclass {float:left;width : 70%;}
+	.newdayclass>div{ text-align:center;border-style:solid;background-color:#FFFFBB;border-radius:5px;border-color:#FFDD55;}
+	.pointclass {border-style:solid;float:left;background-color:#FFEE99;border-radius:3px; border-color:#FFAA33;}
 	.pointclass span{display:none}
-	.siteclass {border-style:solid;float:left}
+	.siteclass {border-style:solid;float:left;background-color:#CCBBFF;border-radius:3px; border-color:#FFAA33;}
 	.siteclass span{display:none}
-	.eatclass {border-style:solid;float:left}
+	.eatclass {border-style:solid;float:left;background-color:#FFC8B4;border-radius:3px;border-color:#FFAA33;}
 	.eatclass span{display:none}
-	.imgbutton {border-style:outset;}
+	.imgbutton {border-style:outset; background-color:white;}
 	.imgbutton:active {border-style:inset}
-	.keyinclass {position:absolute;z-index:2;background-color:#66FF66}
+	.keyinclass {position:absolute;z-index:2;background-color:#DDDDDD}
 </style>
 <script src = "js/jquery-1.11.1.min.js"></script>
 <script>
@@ -425,11 +425,11 @@ function checksubmit(){
 			<br>
 			<img src = "images/point.png" class = "imgbutton" onclick = "addpoint()">
 			<br>
-			<input type="button" value = "上一天" onclick = "reday()">
+			<input type="button" value = "上一天" onclick = "reday()"  style="font-family: 微軟正黑體;color:white;border-radius:6px; background-color:#FF8800;">
 			<br>
-			<input type="button" value = "下一天" onclick = "nextday()">
+			<input type="button" value = "下一天" onclick = "nextday()"  style="font-family: 微軟正黑體;color:white;border-radius:6px; background-color:#FF8800;">
 			<br>
-			<input type="submit" value = "送出">
+			<input type="submit" value = "送出"  style="font-family: 微軟正黑體;color:white;border-radius:6px; background-color:#FF8800;">
 		</div>
 		<span id = "step2main"></span>
 	</div>
@@ -437,12 +437,12 @@ function checksubmit(){
 
 <div id = "eatdiv" hidden>
 	<div class = "eatclass">
-		美食店名<br><input type = "text" name = "o-foodStore" readOnly><br>
+		<div style="color:#666666; font-family: 微軟正黑體;">美食店名</div><br><input type = "text" name = "o-foodStore" readOnly><br>
 		<span>
-			美食連絡電話<br><input type = "text" name = "o-foodTel"><br>
-			美食店址<br><input type = "text" name = "o-foodAddress"><br>
-			美食營業時間<br><input type = "text" name = "o-foodTime"><br>
-			美食備註<br><input type = "text" name = "o-foodRemark">	<br>
+			<div style="color:#666666; font-family: 微軟正黑體;">美食連絡電話</div><br><input type = "text" name = "o-foodTel"><br>
+			<div style="color:#666666; font-family: 微軟正黑體;">美食店址</div><br><input type = "text" name = "o-foodAddress"><br>
+			<div style="color:#666666; font-family: 微軟正黑體;">美食營業時間</div><br><input type = "text" name = "o-foodTime"><br>
+			<div style="color:#666666; font-family: 微軟正黑體;">美食備註</div><br><input type = "text" name = "o-foodRemark">	<br>
 			<div>
 				<input type="hidden" name = "o-foodpiccount" value = "0">
 				<div></div>
@@ -451,17 +451,17 @@ function checksubmit(){
 				<input type="button" onclick="picup(this)" value="上傳">
 			</div>
 		</span>
-	<input type="button" value= "展開/收合" onclick = "modway(this)">
-	<input type="button" value= "刪除" onclick = "delway(this)"></div>
+	<input type="button" value= "展開/收合" onclick = "modway(this)"  style="font-family: 微軟正黑體;color:white;border-radius:6px; background-color:#FF8800;">
+	<input type="button" value= "刪除" onclick = "delway(this)" style="font-family: 微軟正黑體;color:white;border-radius:6px; background-color:#FF8800;"></div>
 </div>
 
 <div id = "sitediv" hidden>
 	<div class = "siteclass">
-		住宿店名<br><input type = "text" name = "o-hotel" readOnly><br>
+		<div style="color:#666666; font-family: 微軟正黑體;">住宿店名</div><br><input type = "text" name = "o-hotel" readOnly><br>
 		<span>
-			住宿連絡電話<br><input type = "text" name = "o-hotelTel"><br>
-			住宿地址<br><input type = "text" name = "o-hotelAddress"><br>
-			住宿備註<br><input type = "text" name = "o-hotelRemark"><br>
+			<div style="color:#666666; font-family: 微軟正黑體;">住宿連絡電話</div><br><input type = "text" name = "o-hotelTel"><br>
+			<div style="color:#666666; font-family: 微軟正黑體;">住宿地址</div><br><input type = "text" name = "o-hotelAddress"><br>
+			<div style="color:#666666; font-family: 微軟正黑體;">住宿備註</div><br><input type = "text" name = "o-hotelRemark"><br>
 			<div>
 				<input type="hidden" name = "o-hotelpiccount" value = "0">
 				<div></div>
@@ -470,16 +470,16 @@ function checksubmit(){
 				<input type="button" onclick="picup(this)" value="上傳">
 			</div>
 		</span>
-		<input type="button" value= "展開/收合" onclick = "modway(this)">
-		<input type="button" value= "刪除" onclick = "delway(this)">
+		<input type="button" value= "展開/收合" onclick = "modway(this)"  style="font-family: 微軟正黑體;color:white;border-radius:6px; background-color:#FF8800;">
+		<input type="button" value= "刪除" onclick = "delway(this)"  style="font-family: 微軟正黑體;color:white;border-radius:6px; background-color:#FF8800;">
 	</div>
 </div>
 
 <div id = "pointdiv" hidden>
 	<div class = "pointclass">
-		景點名稱<br><input type = "text" name = "o-pointName" readOnly><br>
+		<div style="color:#666666; font-family: 微軟正黑體;">景點名稱</div><br><input type = "text" name = "o-pointName" readOnly><br>
 		<span>
-			景點說明<br><textarea name = "o-pointSummary" cols="40" rows = "5"></textarea><br>
+			<div style="color:#666666; font-family: 微軟正黑體;">景點說明</div><br><textarea name = "o-pointSummary" cols="40" rows = "5"></textarea><br>
 			<div>
 				<input type="hidden" name = "o-placepiccount" value = "0">
 				<div></div>
@@ -488,8 +488,8 @@ function checksubmit(){
 				<input type="button" onclick="picup(this)" value="上傳">
 			</div>
 		</span>
-		<input type="button" value= "展開/收合" onclick = "modway(this)">
-		<input type="button" value= "刪除" onclick = "delway(this)">
+		<input type="button" value= "展開/收合" onclick = "modway(this)"  style="font-family: 微軟正黑體;color:white;border-radius:6px; background-color:#FF8800;">
+		<input type="button" value= "刪除" onclick = "delway(this)"  style="font-family: 微軟正黑體;color:white;border-radius:6px; background-color:#FF8800;">
 	</div>
 </div>
 
@@ -503,9 +503,9 @@ function checksubmit(){
 			<input type="hidden" name="o-pointcount" value="0">
 			<div>
 				<img src = "images/move.png">
-				<input type="text" name="o-traffic">
+				<input type="text" name="o-traffic" style="margin: 0 auto; font-family: 微軟正黑體; width:30%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;">
 			</div>
-			<p>簡介<br><textarea name = "o-memo" cols="40" rows = "5"></textarea></p>		
+			<p><div style="color:#666666; font-family: 微軟正黑體;">簡介</div><br><textarea name = "o-memo" cols="40" rows = "5" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:80px;"></textarea></p>		
 		</div>
 		<div></div>
 	</div>
