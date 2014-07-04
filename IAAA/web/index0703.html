@@ -13,7 +13,7 @@
 		$("#bodycolor").css("width",$(window).innerWidth()*0.95+"px");
 		 $("footer span img").css("height",$(window).innerHeight()*0.05);
 		 $("footer span img").css("width",$("#bodycolor").css("width"));
-	 document.getElementsByTagName("section")[0].style.height=$(window).innerHeight()*0.95-$("header").height()-$("footer").height()+"px";
+	 document.getElementsByTagName("section")[0].style.height=$(window).innerHeight()*0.7-$("header").height()-$("footer").height()+"px";
 	 document.getElementsByTagName("body")[0].style.display = "block";
 	 $("iframe").css("height",$("section").css("height"));
 	 $("iframe").css("width",$("section").css("width"));
@@ -21,19 +21,7 @@
 	 document.getElementById("form2").hidden=true;
 	 
 	 }
-	 window.onresize=function(){
-		$("#bodycolor").css("height",$(window).innerHeight()*0.8+"px");
-		$("#bodycolor").css("width",$(window).innerWidth()*0.95+"px");
-		 $("footer span img").css("height",$(window).innerHeight()*0.05);
-		 $("footer span img").css("width",$("#bodycolor").css("width"));
-	 document.getElementsByTagName("section")[0].style.height=$(window).innerHeight()*0.95-$("header").height()-$("footer").height()+"px";
-	 document.getElementsByTagName("body")[0].style.display = "block";
-	 $("iframe").css("height",$("section").css("height"));
-	 $("iframe").css("width",$("section").css("width"));
-	 document.getElementById("form1").hidden=true;
-	 document.getElementById("form2").hidden=true;
 	 
-	 }
 	 function processlogin(){
 		 document.getElementById("form1").hidden=false;
 		 var element = document.getElementById("bodycolor");
@@ -52,7 +40,6 @@
 		 var element = document.getElementById("bodycolor");
 	     element.style.opacity = "1";
 	     element.style.filter  = "alpha(opacity=100)";
-		 return false;
 		 
 	 }
 	 	 function  processregister(){
@@ -65,7 +52,7 @@
 		 $("#form2").css("padding-top",($(window).innerHeight()-$("#form2").height()-10)/2 + "px");
 		 $("#form2").css("padding-bottom",($(window).innerHeight()-$("#form2").height()-10)/2 + "px");
 		 $("#form2").css("left","0");
-		 $("#form2").css("top","10px");
+		 $("#form2").css("top","0");
 		 
 	 }
 	 
@@ -77,12 +64,6 @@
 		 
 	 }
 	
-	function checkreg(x){
-		
-	}
-	function gocontent(){
-		$("iframe").attr("src","tripcontent.html?id=4")
-	}
 </script>
 
 	<!--[if lt IE 8]>
@@ -233,7 +214,7 @@ document.getElementsByTagName("body")[0].style.display = "none";
             	<div class="wrapper">
                 <table width="100%">
                 <tr>
-                 <td width="79%" rowspan="2"><a href="tripindex.html"><img style="width:230px;margin-left:5px;" src="images/logo.png"></img></a></td>
+                 <td width="79%" rowspan="2"><a href="index.html"><img style="width:230px;margin-left:5px;" src="images/logo.png"></img></a></td>
                 <td width="80%">
                 <ul class="menu" style="color:gray;font-size:24px; font-family:微軟正黑體; margin-top:-8%;">
                             <a class="active" onClick="processlogin()"><span class="style1">登入</span></a>|
@@ -249,7 +230,7 @@ document.getElementsByTagName("body")[0].style.display = "none";
                     
                        
              
-              <nav><img style="width:100%;height:17%;" src="images/pic1.png" onclick="gocontent()"></img></nav>
+              <nav2><a href="index.html"><img style="width:100%;height:17%;" src="images/pic1.png"></img></a> </nav2>
               </div>
             </div>
         </div>
@@ -320,24 +301,20 @@ document.getElementsByTagName("body")[0].style.display = "none";
 </form>	
 
 
-<form id="form2" method = "GET" action="reg" onsubmit = "return checkreg(this)">
+<form id="form2">
 	<fieldset id="fieldset2">
 		<p align="center">
 		<img style="width:106%;margin-left:-3%;margin-top:-5%;" src="images/pic32.png"></img><br/><br/>
 		<img style="width:100px;margin-left:5px;" src="images/pic34.png"></img><br/>	  
-		<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-30%;">帳號</span><br/><input type="text" id="accountName" size="20" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;" required autofocus/>
+		<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-30%;">ID設定</span><br/><input type="text" id="UserAccount" size="20" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;" required autofocus/>
 		</p>
 		<p align="center">
 		<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-35%;">密碼</span><br/>
-		<input type="password" id="UserPass" name = "pwd" size="20" style="font-family: 微軟正黑體; width:40%; border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"/>
+		<input type="password" id="UserPass" size="20" style="font-family: 微軟正黑體; width:40%; border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"/>
 		</p>
 		<p align="center">
 		<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-28%;">確認密碼</span><br/>
 		<input type="password" id="ConfirmPass" size="20" style="font-family: 微軟正黑體; width:40%; border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"/>
-		</p>
-		<p align="center">
-			<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-32%;">姓名</span><br/>
-			<input type="text" name="userName" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"/>
 		</p>
 		<p align="center">
 			<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-32%;">E-mail</span><br/>
@@ -346,14 +323,6 @@ document.getElementsByTagName("body")[0].style.display = "none";
 		<p align="center">
 			<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-35%;">地址</span><br/>
 			<input type="text" id="Address" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"/>
-		</p>
-		<p align="center">
-			<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-35%;">電話</span><br/>
-			<input type="text" name="tel" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"/>
-		</p>
-		<p align="center">
-			<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-35%;">自我介紹</span><br/>
-			<input type="text" name="rto" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"/>
 		</p>
 		<div align="center">		  
 			<table>

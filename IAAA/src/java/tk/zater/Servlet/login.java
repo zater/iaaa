@@ -50,6 +50,7 @@ public class login extends HttpServlet {
             request.getSession().setAttribute("Username", username);
             request.getSession().setAttribute("userid", user.get(0).getId());
             request.getSession().setAttribute("userLV", user.get(0).getUserLv());
+            response.sendRedirect("tripindex.html");
             }else{
             
             out.print("fail");
