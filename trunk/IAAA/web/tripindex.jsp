@@ -7,33 +7,54 @@
     <meta charset="utf-8">
 <script src = "js/jquery-1.11.1.min.js"></script>
 <script>
-	 
-	 window.onload=function(){
+<%
+try {
+String lv =  String.valueOf(request.getSession().getAttribute("userLV"));
+out.print("'"+String.valueOf(request.getSession().getAttribute("Username"))+"'");
+if ("5".equals(lv)) {
+
+%>
+
+<%
+}
+} catch (Exception e) {
+}
+
+%>
+	$(document).ready(function(){
+		$("body").toggle();
+	});
+	 $(window).load(function(){		
+		 $("body").toggle();
+		 $("#theblock").css("padding-left",$(window).innerWidth()/2 + "px");
+		 $("#theblock").css("padding-right",$(window).innerWidth()/2 + "px");
+		 $("#theblock").css("padding-top",$(window).innerHeight()/2 + "px");
+		 $("#theblock").css("padding-bottom",$(window).innerHeight()/2 + "px");
+		 $("#theblock").css("left","0");
+		 $("#theblock").css("top","0");
 		$("#bodycolor").css("height",$(window).innerHeight()*0.8+"px");
 		$("#bodycolor").css("width",$(window).innerWidth()*0.95+"px");
-		 $("footer span img").css("height",$(window).innerHeight()*0.05);
-		 $("footer span img").css("width",$("#bodycolor").css("width"));
-	 document.getElementsByTagName("section")[0].style.height=$(window).innerHeight()*0.95-$("header").height()-$("footer").height()+"px";
+		$("footer span img").css("width",$("#bodycolor").css("width"));
+		 document.getElementsByTagName("section")[0].style.height=$(window).innerHeight()*0.95-$("header").height()- $("footer span img").height()+"px";		
+		 $("iframe").css("height",$("section").css("height"));
+		 $("iframe").css("width",$("section").css("width"));	 
+		 document.getElementById("form1").hidden=true;
+		 document.getElementById("form2").hidden=true;
+		 setTimeout(function(){$("#theblock").toggle()},500);
+	 
+	 });
+	 $(window).resize(function(){
+		$("#bodycolor").css("height",$(window).innerHeight()*0.8+"px");
+		$("#bodycolor").css("width",$(window).innerWidth()*0.95+"px");
+		 $("footer span img").css("width",$("#bodycolor").css("width"));	
+	 document.getElementsByTagName("section")[0].style.height=$(window).innerHeight()*0.95-$("header").height()- $("footer span img").height()+"px";
 	 document.getElementsByTagName("body")[0].style.display = "block";
 	 $("iframe").css("height",$("section").css("height"));
 	 $("iframe").css("width",$("section").css("width"));
 	 document.getElementById("form1").hidden=true;
 	 document.getElementById("form2").hidden=true;
 	 
-	 }
-	 window.onresize=function(){
-		$("#bodycolor").css("height",$(window).innerHeight()*0.8+"px");
-		$("#bodycolor").css("width",$(window).innerWidth()*0.95+"px");
-		 $("footer span img").css("height",$(window).innerHeight()*0.05);
-		 $("footer span img").css("width",$("#bodycolor").css("width"));
-	 document.getElementsByTagName("section")[0].style.height=$(window).innerHeight()*0.95-$("header").height()-$("footer").height()+"px";
-	 document.getElementsByTagName("body")[0].style.display = "block";
-	 $("iframe").css("height",$("section").css("height"));
-	 $("iframe").css("width",$("section").css("width"));
-	 document.getElementById("form1").hidden=true;
-	 document.getElementById("form2").hidden=true;
-	 
-	 }
+	 });
 	 function processlogin(){
 		 document.getElementById("form1").hidden=false;
 		 var element = document.getElementById("bodycolor");
@@ -65,7 +86,7 @@
 		 $("#form2").css("padding-top",($(window).innerHeight()-$("#form2").height()-10)/2 + "px");
 		 $("#form2").css("padding-bottom",($(window).innerHeight()-$("#form2").height()-10)/2 + "px");
 		 $("#form2").css("left","0");
-		 $("#form2").css("top","10px");
+		 $("#form2").css("top","0");
 		 
 	 }
 	 
@@ -82,6 +103,9 @@
 	}
 	function gocontent(){
 		$("iframe").attr("src","tripcontent.html?id=4")
+	}
+	function gosearch(){
+		console.log("test");
 	}
 </script>
 
@@ -128,6 +152,11 @@ max-width: 450px;
 position:absolute;
 z-index:1;	
 
+}
+#theblock{
+	position:absolute;
+	z-index:1;	
+	background-color:white;
 }
 fieldset{
 	
@@ -220,12 +249,11 @@ border-color:white;
 	margin-left:auto;
 	margin-right:auto;
 }
+
 </style>
 </head>
 <body id="page1">
-<script>
-document.getElementsByTagName("body")[0].style.display = "none";
-</script>	<!--==============================header=================================-->
+<!--==============================header=================================-->
      <div id="bodycolor" readOnly="true">
     <header>
     	<div class="row-top">
@@ -233,17 +261,15 @@ document.getElementsByTagName("body")[0].style.display = "none";
             	<div class="wrapper">
                 <table width="100%">
                 <tr>
-                 <td width="79%" rowspan="2"><a href="tripindex.html"><img style="width:230px;margin-left:5px;" src="images/logo.png"></img></a></td>
+                 <td width="79%" rowspan="2"><a href="tripindex.jsp"><img style="width:230px;margin-left:5px;" src="images/logo.png"></img></a></td>
                 <td width="80%">
                 <ul class="menu" style="color:gray;font-size:24px; font-family:微軟正黑體; margin-top:-8%;">
                             <a class="active" onClick="processlogin()"><span class="style1">登入</span></a>|
                             <a class="active" onClick="processregister()"><span class="style1">註冊</span></a>| 
-                           <a href="#"><span class="style1">聯絡我們</span></a>
                         </ul></td>
                 	</tr>
                 <tr>
-                  <td><input style="color:gray; width:30%;margin-left:7%;"type="text" name="search" placeholder="我想去..." size="10" maxlength="10" />
-              <input style="font-weight:bold;color:white; background:gray; height:25px;" type="button" value="GO"/></td>
+                  <td><input style="color:gray; width:30%;margin-left:7%;"type="text" name="search" placeholder="我想去..." size="10" maxlength="10" onclick="gosearch()" readonly >
                 </tr>
                 </table>
                     
@@ -275,7 +301,7 @@ document.getElementsByTagName("body")[0].style.display = "none";
             </div>
             
                 	<div class="maxheight indent-bot">
-                      <iframe src="add.html"></iframe>
+                      <iframe src="add.jsp"></iframe>
                 	</div>
                 </article>
           
@@ -286,7 +312,7 @@ document.getElementsByTagName("body")[0].style.display = "none";
   <footer>
         <div class="main">
         	<div class="aligncenter">
-            	<span> <img src="images/pic12.png" alt=""/></span>
+            	<span> <img src="images/footer.png" alt=""/></span>
             </div>
         </div>
     </footer>
@@ -297,7 +323,7 @@ document.getElementsByTagName("body")[0].style.display = "none";
 <img style="width:106%;margin-left:-3%;margin-top:-2%;" src="images/pic30.png"></img><br/><br/>
 <img style="width:100px;margin-left:5px;" src="images/pic34.png"></img><br/>
   
-  <input type="text" id="UserAccount" size="20"  name="accountName" placeholder="使用者ID"  style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#87CECB; height:25px;"required autofocus/>
+  <input type="text" id="UserAccount" size="20"  name="accountName" placeholder="使用者ID"  style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#87CECB; height:25px;" />
 </div>
 <p align="center">
 <input type="password" id="UserPass" size="20" name="pwd" placeholder="密碼"  style="font-family: 微軟正黑體; width:40%; border-radius:5px; border-style:solid; border-color:#87CECB;height:25px;"/><p align="center">
@@ -313,7 +339,7 @@ document.getElementsByTagName("body")[0].style.display = "none";
 <table>
 <tr> 
 <td><input type="submit" class="button" form="form1" value="登入" /></p></td>
-<td><input type="submit" class="button" form="form1" onClick="cancellogin()" value="取消" /></p></td>
+<td><input type="button" class="button" form="form1" onClick="cancellogin()" value="取消" /></p></td>
 </tr></table>
 </div>
 </fieldset>
@@ -325,10 +351,10 @@ document.getElementsByTagName("body")[0].style.display = "none";
 		<p align="center">
 		<img style="width:106%;margin-left:-3%;margin-top:-5%;" src="images/pic32.png"></img><br/><br/>
 		<img style="width:100px;margin-left:5px;" src="images/pic34.png"></img><br/>	  
-		<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-30%;">帳號</span><br/><input type="text" id="accountName" size="20" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;" required autofocus/>
+		<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-30%;">帳號</span><br/><input type="text" id="accountName" name="accountName" size="20" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"/>
 		</p>
 		<p align="center">
-		<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-35%;">密碼</span><br/>
+		<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-20%;">密碼(6-20碼)</span><br/>
 		<input type="password" id="UserPass" name = "pwd" size="20" style="font-family: 微軟正黑體; width:40%; border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"/>
 		</p>
 		<p align="center">
@@ -341,11 +367,11 @@ document.getElementsByTagName("body")[0].style.display = "none";
 		</p>
 		<p align="center">
 			<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-32%;">E-mail</span><br/>
-			<input type="text" id="E-mail" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"/>
+			<input type="text" id="email" name="email" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"/>
 		</p>
 		<p align="center">
 			<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-35%;">地址</span><br/>
-			<input type="text" id="Address" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"/>
+			<input type="text" id="address" name="address" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"/>
 		</p>
 		<p align="center">
 			<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-35%;">電話</span><br/>
@@ -353,18 +379,20 @@ document.getElementsByTagName("body")[0].style.display = "none";
 		</p>
 		<p align="center">
 			<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-35%;">自我介紹</span><br/>
-			<input type="text" name="rto" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"/>
+			<input type="text" name="inrtoduction" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"/>
 		</p>
 		<div align="center">		  
 			<table>
 			<tr>   
-					<td><input type="submit" class="button2" form="form1" value="送出" /></td> 
-					<td><input type="submit" class="button2" form="form1" onClick="cancelregister()" value="取消" /></td>
+					<td><input type="submit" class="button2" form="form2" value="送出" /></td> 
+					<td><input type="button" class="button2" form="form2" onClick="cancelregister()" value="取消" /></td>
 				</tr>
 			</table>
 		</div>
 
 	</fieldset>
 </form>	
+<div id="theblock">
+</div>
 </body>
 </html>

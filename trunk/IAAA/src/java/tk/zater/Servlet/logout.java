@@ -3,25 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package tk.zater.Servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import tk.zater.CS.UserTable;
-import tk.zater.CreateSession.CreateHibernateServer;
 
 /**
  *
  * @author zater
  */
-public class login extends HttpServlet {
+public class logout extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,25 +33,9 @@ public class login extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            String username = request.getParameter("accountName");
-            String pwd = request.getParameter("pwd");
-            Session sess = CreateHibernateServer.getSessionFactory().openSession();
-            Query searchuserQuery = sess.createQuery("from UserTable where accountName=:username and pwd=:pwd");
-            searchuserQuery.setString("username", username);
-            searchuserQuery.setString("pwd", pwd);
-            List<UserTable>user=searchuserQuery.list();
-            if(user.size()!=0)
-            {
-            out.print(user.get(0).getUserLv());
-            request.getSession().setAttribute("Username", username);
-            request.getSession().setAttribute("userid", user.get(0).getId());
-            request.getSession().setAttribute("userLV", user.get(0).getUserLv());
-            response.sendRedirect("tripindex.jsp");
-            }else{
-            
-            response.sendRedirect("tripindex.jsp");
-            
-            }
+            request.getSession().removeAttribute("userLV");
+            request.getSession().removeAttribute("userid");
+            request.getSession().removeAttribute("username");
         }
     }
 

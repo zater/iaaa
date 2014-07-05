@@ -160,7 +160,7 @@ public class addTravel extends HttpServlet {
             }
 
             tx.commit();
-            response.sendRedirect("tripindex.html");
+            response.sendRedirect("add.jsp");
         }
     }
 

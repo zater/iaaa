@@ -1,0 +1,528 @@
+﻿<%@page import="java.util.List"%>
+<%@page import="tk.zater.CS.plantype"%>
+<%@page import="org.hibernate.Query"%>
+<%@page import="org.hibernate.Session"%>
+<%@page import="tk.zater.CreateSession.CreateHibernateServer"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!doctype html>
+<html lang="zh-tw">
+<head>
+<meta charset="utf-8">
+<title>上架</title>
+<style>
+	#main #step1  {margin-left:30%}
+	#main #step1 span {margin-left:1%}
+	#step1 .monthnum {width:3em}
+	#step1 .paynum {width:8em;text-align:center}
+	#addmain {display:inline;float:left;border-style:solid;margin-left:15%;background-color:#FFEE99;border-radius:5px;border-color:#FFDD55;}
+	#step2main h1 {text-align: center;font-family:微軟正黑體;color:#666666;}
+	#step2main h2 {text-align: center;color:red}
+	.newdayclass {float:left;width : 70%;}
+	.newdayclass>div{ text-align:center;border-style:solid;background-color:#FFFFBB;border-radius:5px;border-color:#FFDD55;}
+	.pointclass {border-style:solid;float:left;background-color:#FFEE99;border-radius:3px; border-color:#FFAA33;}
+	.pointclass span{display:none}
+	.siteclass {border-style:solid;float:left;background-color:#CCBBFF;border-radius:3px; border-color:#FFAA33;}
+	.siteclass span{display:none}
+	.eatclass {border-style:solid;float:left;background-color:#FFC8B4;border-radius:3px;border-color:#FFAA33;}
+	.eatclass span{display:none}
+	.imgbutton {border-style:outset; background-color:white;}
+	.imgbutton:active {border-style:inset}
+	.keyinclass {position:absolute;z-index:2;background-color:#DDDDDD}
+</style>
+<script src = "js/jquery-1.11.1.min.js"></script>
+<script>
+		
+$(document).ready(function(){
+	if($("#step1 :input:first").val() != ""){
+		location.reload();
+	}
+	$("[hidden]").hide(1);
+});
+// step1 start
+	function opentag(x){ // step1表格控制
+		if(x.type == "checkbox") {
+			$(x).parent().children("span:last").toggle();
+		} else {
+			$(x).parent().children("span:last").toggle();
+			if($(x).val() == "分享") {
+				$("input[name='pay']").val("0");
+			}
+		}
+	}
+
+	function typecheck(x){ // step1金額、季節、時間長度的上下限
+		if(x.value > 12 && x.name != "Days" && x.name != "pay"){
+			x.value = "12";
+		} 
+		if(x.value < 1){
+			x.value = "1";
+		} 
+		if(x.name == "pay"){
+			x.value = x.value.replace(/\,/g,"");
+			if(isNaN(x.value)){
+				 x.value = 1;
+			}
+			if(parseInt(x.value) < 1){
+				x.value = "1";
+			} 
+			x.value = parseInt(x.value);
+			if(x.value.length > 3) {
+				flag = "";
+				tag = 0;
+				while(tag != x.value.length){
+					tag++;
+					flag = x.value.charAt(x.value.length-tag) + flag;
+					if(tag % 3 == 0 && tag != x.value.length) {
+						flag = "," + flag;
+					}
+				}
+				x.value = flag;
+			}
+		}
+	}
+
+	function payfocus(x){ // step1 金額格式轉換
+		x.value = x.value.replace(/\,/g,"");
+	}
+	function newsites() { // step1 地點新增
+		$("#allsite").children(":first").val(parseInt($("#allsite").children(":first").val())+1)
+		tag = document.createElement("select");
+		tag.name = "locationName"+ $("#allsite").children(":first").val();
+		flag = ["基隆市","臺北市","新北市","桃園縣","新竹市","新竹縣","苗栗縣","臺中市","南投縣","彰化縣","雲林縣","嘉義市","嘉義縣","臺南市","高雄市","屏東縣","宜蘭縣","花蓮縣","澎湖縣","金門縣","連江縣","其他"];
+		for(i = 0; i < flag.length; i++) {
+			tag2 = document.createElement("option");
+			tag2.value = flag[i]
+			tag2.innerHTML = flag[i];
+			tag.appendChild(tag2);
+		}
+		$("#allsite").append(tag);
+		$("#allsite").append(document.createElement("br"));
+	}
+	
+	function coverup(x){ // step1 封面
+		if( $.trim($(x).parent().children(":file")[0].files[0].name) == ""){
+			return false;
+		}
+		fData = new FormData();
+		fData.append( 'file', $(x).parent().children(":file")[0].files[0] );	
+		$.ajax({
+			url: 'pictureUpload',  //Server script to process data
+			type: 'POST',
+			data: fData,
+			cache: false,
+			contentType: false,
+			processData: false,
+			success:function(res){
+				$(x).parent().children("input:first").val(res);
+				$(x).parent().children("p:last").html("已上傳檔案:"+res);
+			}
+		});
+	}
+	function step1select(x){ // step1 主題選擇
+		if($(x).children("option:selected").val() != "其他") {
+			$(x).next().hide();
+			$(x).next().val($(x).children("option:selected").val());
+		} else {
+			$(x).next().show();
+			$(x).next().val("");
+		}
+	}
+
+	function openstep2(){ // step1表格檢查
+		flag = true;
+		for( i = 0; i < $("#step1 :text").length; i++){
+			x = $("#step1 :text")[i];
+			if($.trim(x.value) == "" && i != 2){
+				$(x).parent().children("span:last").show();
+				flag = false;
+			} else {
+				$(x).parent().children("span:last").hide();
+			}
+		}
+		if($("#allsite select").length == 0) {
+			$("#allsite").parent().children("span:eq(1)").show();
+			flag = false;
+		} else {
+			$("#allsite").parent().children("span:eq(1)").hide();
+		}
+		if($.trim($("#step1 textarea").val()) == "") {
+			$("#step1 textarea").parent().children("span").show();
+			flag = false;
+		} else {
+			$("#step1 textarea").parent().children("span:last").hide();
+		}
+		if(flag == true){
+			nextday();
+		} else {
+			return false;
+		}
+	}
+// step1 end
+// step2
+var page = 0; // 位於第X頁
+var allpage = 0; // 現有全部頁數
+var bolcheck = false;
+function picup(x) {
+	if( $.trim($(x).parent().children(":file")[0].files[0].name) == ""){
+			return false;
+		}
+	fData = new FormData();
+	fData.append( 'file', $(x).parent().children(":file")[0].files[0] );	
+	$.ajax({
+		url: 'pictureUpload',  //Server script to process data
+		type: 'POST',
+		data: fData,
+		cache: false,
+		contentType: false,
+		processData: false,
+		success:function(res){
+			$(x).parent().children(":input:first").val(parseInt($(x).parent().children(":input:first").val())+1);
+			x = $(x).parent().children("div");
+			tag = document.createElement("input");
+			tag.type = "hidden";
+			tag.value = res;
+			tag.name = $(x).parent().children(":input:first").attr("name")+"-pic"+$(x).parent().children(":input:first").val();
+			$(x).append(tag);
+			tag = document.createElement("p");
+			tag.innerHTML = res;
+			$(x).append(tag);
+		}
+	});
+}
+function addeat(){ // 新增餐廳
+	x = "day" + page;
+	y = $("#"+x+" input[name='"+x+"-eatcount']").val();
+	$("#"+x+" input[name='"+x+"-eatcount']").val(parseInt(y)+1);
+	$("#"+x).children("div :last").append($("#eatdiv").children(":first").clone());
+	
+}
+
+function addsite(){ // 新增住宿
+	x = "day" + page;
+	y = $("#"+x+" input[name='"+x+"-sitecount']").val();
+	$("#"+x+" input[name='"+x+"-sitecount']").val(parseInt(y)+1);
+	$("#"+x).children("div :last").append($("#sitediv").children(":first").clone());
+}
+
+function addpoint(){ // 新增景點
+	x = "day" + page;
+	y = $("#"+x+" input[name='"+x+"-pointcount']").val();
+	$("#"+x+" input[name='"+x+"-pointcount']").val(parseInt(y)+1);
+	$("#"+x).children("div :last").append($("#pointdiv").children(":first").clone());
+}
+
+
+function delway(x){
+	$(x).parent().remove();
+	if(bolcheck == true && $(x).parent().children("span").css("display") != "none") {
+		bolcheck = false;
+	}
+	if($(x).parent().attr("class")=="eatclass") {
+		x = "day" + page;
+		y = $("#"+x+" input[name='"+x+"-eatcount']").val();
+		$("#"+x+" input[name='"+x+"-eatcount']").val(parseInt(y)-1);
+	} else if($(x).parent().attr("class")=="siteclass"){
+		x = "day" + page;
+		y = $("#"+x+" input[name='"+x+"-sitecount']").val();
+		$("#"+x+" input[name='"+x+"-sitecount']").val(parseInt(y)-1);
+	} else {
+		x = "day" + page;
+		y = $("#"+x+" input[name='"+x+"-pointcount']").val();
+		$("#"+x+" input[name='"+x+"-pointcount']").val(parseInt(y)-1);
+	}	
+}
+
+function modway(x){ // 展開/收合
+	x = $(x).parent().children("span");	
+	if(bolcheck == false) {
+		$(x).toggle();
+		bolcheck = true;
+	} else if(bolcheck == true && $(x).css("display") != "none"){
+		$(x).toggle();	
+		bolcheck = false;
+	} else {
+		return false;
+	}
+	if($(x).css("display") == "none"){			
+		$(x).parent().children("input:first").attr("readOnly",true);
+		$(x).parent().toggleClass("keyinclass");
+	} else {
+		$(x).parent().children("input:first").attr("readOnly",false);
+		x = $(x).parent();
+		$(x).toggleClass("keyinclass");
+		$(x).css("top",window.innerHeight*0.3+"px");
+		$(x).css("left",window.innerWidth/2+"px");
+	}
+}
+function nextday(){ // 切換到下一頁
+	if(bolcheck == true) {
+		return false;
+	}
+	if(page != 0) {
+		x = $("#day"+page).children(":eq(1)").children();
+		for(i = 0; i < $(x).length; i++) {
+			if($.trim($(x[i]).children(":input:first").val()) == ""){
+				$("#day"+page).find("h2").html("請檢查表格(至少要寫店名、景點名)");
+				return false;
+			} else {
+				$("#day"+page).find("h2").html("");
+			}
+		}
+	}
+	page++;
+	if(page == $("#step1 [type=number]:last").val()) {
+		$("#addmain").children(":button:last").attr('disabled', true);
+		$("#addmain").children(":submit").attr('disabled', false);
+	} else {
+		$("#addmain").children(":button:last").attr('disabled', false);
+		$("#addmain").children(":submit").attr('disabled', true);
+	}
+	if(page==1){
+		$("#step1").hide();
+		$("#step2").show();
+	}
+	if(page > allpage) {
+		allpage++;
+		$("#step2main").append($("#newdaydiv").clone().children(":first").attr("id","day"+allpage));
+		$("#day"+allpage).find("h1").html("第"+allpage+"天");
+		for(i = 0; i < $("#day"+allpage).find("input").length; i++) {
+			x = $("#day"+allpage).find("input")[i];
+			y = $(x).attr("name").replace("o","day"+allpage);
+			$(x).attr("name",y);
+		}
+		$("#day"+allpage).find("textarea").attr("name","day"+allpage+"-memo");
+	}
+	for(i = 0; i < $("#step2main").children.length; i++) {
+		x = $("#step2main").children()[i];
+		$(x).hide();
+	}
+	$("#day"+page).show();
+}
+function reday(){ // 回到上一頁
+	if(bolcheck == true) {
+		return false;
+	}
+	x = $("#day"+page).children(":eq(1)").children();
+	for(i = 0; i < $(x).length; i++) {
+		if($.trim($(x[i]).children(":input:first").val()) == ""){
+			$("#day"+page).find("h2").html("請檢查表格(至少要寫店名、景點名)");
+			return false;
+		} else {
+			$("#day"+page).find("h2").html("");
+		}
+	}
+	page--;
+	if(page != $("#step1 [type=number]:last").val()) {
+		$("#addmain").children(":button:last").attr('disabled', false);
+		$("#addmain").children(":submit").attr('disabled', true);
+	}
+	if(page==0){
+		$("#step2").hide();
+		$("#step1").show();
+	} else {
+		for(i = 0; i < $("#step2main").children.length; i++) {
+			x = $("#step2main").children()[i];
+			$(x).hide();
+		}
+		$("#day"+page).show();
+	}
+}
+
+function checksubmit(){
+	x = $("#day"+page).children(":eq(1)").children();
+	for(i = 0; i < $(x).length; i++) {
+		if($.trim($(x[i]).children(":input:first").val()) == ""){
+			$("#day"+page).find("h2").html("請檢查表格(至少要寫店名、景點名)");
+			return false;
+		} else {
+			$("#day"+page).find("h2").html("");
+		}
+	}
+	document.forms[0].pay.value = document.forms[0].pay.value.replace(/\,/g,"");
+	daytag = $("#step2main").children("div");
+	for(i = 0; i < $(daytag).length; i++) {
+		eattag = $(daytag[i]).children("div:first").children(":input:eq(0)").val();
+		sitetag = $(daytag[i]).children("div:first").children(":input:eq(1)").val();
+		pointtag = $(daytag[i]).children("div:first").children(":input:eq(2)").val();
+		tag = $(daytag[i]).children("div:last").children(".eatclass");
+		for(j = 0; j < eattag; j++) {
+			inputtag = $(tag[j]).find(":input[name]");
+			for(k = 0; k < $(inputtag).length;k++) {
+				reptag = $(inputtag[k]).attr("name").replace("o",$(daytag[i]).attr("id"))+"-"+(j+1);
+				$(inputtag[k]).attr("name",reptag);
+			}
+		}
+		tag = $(daytag[i]).children("div:last").children(".siteclass");
+		for(j = 0; j < sitetag; j++) {
+			inputtag = $(tag[j]).find(":input[name]");
+			for(k = 0; k < $(inputtag).length;k++) {
+				reptag = $(inputtag[k]).attr("name").replace("o",$(daytag[i]).attr("id"))+"-"+(j+1);
+				$(inputtag[k]).attr("name",reptag);
+			}
+		}
+		tag = $(daytag[i]).children("div:last").children(".pointclass");
+		for(j = 0; j < pointtag; j++) {
+			inputtag = $(tag[j]).find(":input[name]");
+			for(k = 0; k < $(inputtag).length;k++) {
+				reptag = $(inputtag[k]).attr("name").replace("o",$(daytag[i]).attr("id"))+"-"+(j+1);
+				$(inputtag[k]).attr("name",reptag);
+			}
+		}
+	}
+}
+
+// step2 end
+</script>
+</head>
+<body>
+<form id = "main" method="POST" action="addTravel" onsubmit="return checksubmit()">
+	<div id = "step1">
+		<p><span style="text-align:center;color:#666666; font-family: 微軟正黑體;">標題</span><span style="color:red;font-family: 微軟正黑體;" hidden>請填寫此值</span><br><input type="text" name="topic" style="margin: 0 auto; font-family: 微軟正黑體; width:30%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"></p> 
+		<p><span style="text-align:center;color:#666666; font-family: 微軟正黑體;">主題</span><span style="color:red;font-family: 微軟正黑體;" hidden>請填寫此值</span><br>
+			<select onchange="step1select(this)" style="margin: 0 auto; font-family: 微軟正黑體; width:10%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;color:#666666;font-size:14px;">
+				<%
+				Session sess = CreateHibernateServer.getSessionFactory().openSession();
+				Query qr = sess.createQuery("from plantype");
+				List<plantype> plan = qr.list();
+				for(int i = 0; i < plan.size();i++) {
+					out.print("<option>"+plan.get(i).getTypename()+"</option>");
+				}
+				%>
+				<option selected="true">其他</option>
+			</select>
+			<input type="text" name="plantype" style="margin: 0 auto; font-family: 微軟正黑體; width:30%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;">
+		</p>
+		<p><span style="text-align:center;color:#666666; font-family: 微軟正黑體;">特色</span><span style="color:red;font-family: 微軟正黑體;" hidden>請填寫此值</span><br><input type="text" name="characteristic" style="margin: 0 auto; font-family: 微軟正黑體; width:30%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"></p>
+	  <p><span style="text-align:center;color:#666666; font-family: 微軟正黑體;">用途</span>
+			<select onchange="opentag(this)" style="margin: 0 auto; font-family: 微軟正黑體; width:10%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;color:#666666;text-align:center;font-size:14px;">
+				<option>上架</option>
+ 				<option selected>分享</option>
+			</select>
+			<span hidden>
+		<span style="text-align:center;color:#666666; font-family: 微軟正黑體;">金額：NT$<input class="paynum" type="text" name="pay" min="1" value = "0"  onchange="typecheck(this)" onfocus="payfocus(this)" style="margin: 0 auto; font-family: 微軟正黑體; width:10%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;color:#666666;">元</span>
+			</span>
+		</p>		
+		<p><span style="text-align:center;color:#666666; font-family: 微軟正黑體;">季節限定</span><br><span style="text-align:center;color:#666666; font-family: 微軟正黑體;">是</span><input type= "checkbox" onclick = "opentag(this)">
+			<span hidden>
+				<input class="monthnum" type="number" name="month1" min="1" max="12" value = "1"  onchange="typecheck(this)" style="margin: 0 auto; font-family: 微軟正黑體; width:5%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;color:#666666;text-align:center;"><span style="text-align:center;color:#666666; font-family: 微軟正黑體;">月~</span>
+				<input class="monthnum" type="number" name="month2" min="1" max="12" value = "12" onchange="typecheck(this)" style="margin: 0 auto; font-family: 微軟正黑體; width:5%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;color:#666666;text-align:center;"><span style="text-align:center;color:#666666; font-family: 微軟正黑體;">月</span>
+			</span>
+		</p>
+		<p><span style="text-align:center;color:#666666; font-family: 微軟正黑體;">地點</span><span style="color:red;font-family: 微軟正黑體;" hidden>請新增地點</span><br>			
+			<span id = "allsite">
+			<input type="hidden" name="location" value="0"style="margin: 0 auto; font-family: 微軟正黑體; width:15%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;">
+			</span>
+			<input type="button" value="新增" style="font-family: 微軟正黑體;color:white;font-size:14px; width:6%;border-radius:6px; background-color:#FF8800;height:32px;"onclick = "newsites()">
+		</p>
+		<p><span style="text-align:center;color:#666666; font-family: 微軟正黑體;">時間長度</span><input class="monthnum" type="number" name="Days" min="1" value = "1" onchange="typecheck(this)" style="margin: 0 auto; font-family: 微軟正黑體; width:5%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;color:#666666;text-align:center;"><span style="text-align:center;color:#666666; font-family: 微軟正黑體;">天</span></p>
+		<div>
+			<p><span style="text-align:center;color:#666666; font-family: 微軟正黑體;">封面</span></p>
+			<input type="hidden" name = "cover">
+			<p></p>
+			<input type="file" style="margin: 0 auto; font-family: 微軟正黑體;width:30%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;color:#666666;" >
+			<br>
+			<input type="button" onclick="coverup(this)" value="上傳" style="font-family: 微軟正黑體;color:white;font-size:14px; width:6%;border-radius:6px; background-color:#FF8800;height:32px;">
+		</div>
+		<br>
+		<p><span style="text-align:left;color:#666666; font-family: 微軟正黑體;">旅遊簡介</span><span style="color:red;font-family: 微軟正黑體;" hidden>請填寫此值</span><br>
+			<textarea name = "abstract" cols="40" rows = "5" style="margin: 0 auto; font-family: 微軟正黑體; width:36%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:80px;"></textarea>
+		</p>
+		<br>
+		<input type="button" value = "完成，下一步" style="font-family: 微軟正黑體;color:white;font-size:18px; width:30%;border-radius:6px; background-color:#FF8800;height:32px;" onclick="openstep2()">
+	</div>
+	<div id = "step2" hidden>
+		<div id = "addmain">
+			<img src = "images/food.png" class = "imgbutton" onclick = "addeat()">
+			<br>
+			<img src = "images/hotel.png" class = "imgbutton" onclick = "addsite()">
+			<br>
+			<img src = "images/point.png" class = "imgbutton" onclick = "addpoint()">
+			<br>
+			<input type="button" value = "上一天" onclick = "reday()"  style="font-family: 微軟正黑體;color:white;border-radius:6px; background-color:#FF8800;">
+			<br>
+			<input type="button" value = "下一天" onclick = "nextday()"  style="font-family: 微軟正黑體;color:white;border-radius:6px; background-color:#FF8800;">
+			<br>
+			<input type="submit" value = "送出"  style="font-family: 微軟正黑體;color:white;border-radius:6px; background-color:#FF8800;">
+		</div>
+		<span id = "step2main"></span>
+	</div>
+</form>
+
+<div id = "eatdiv" hidden>
+	<div class = "eatclass">
+		<div style="color:#666666; font-family: 微軟正黑體;">美食店名</div><br><input type = "text" name = "o-foodStore" readOnly><br>
+		<span>
+			<div style="color:#666666; font-family: 微軟正黑體;">美食連絡電話</div><br><input type = "text" name = "o-foodTel"><br>
+			<div style="color:#666666; font-family: 微軟正黑體;">美食店址</div><br><input type = "text" name = "o-foodAddress"><br>
+			<div style="color:#666666; font-family: 微軟正黑體;">美食營業時間</div><br><input type = "text" name = "o-foodTime"><br>
+			<div style="color:#666666; font-family: 微軟正黑體;">美食備註</div><br><input type = "text" name = "o-foodRemark">	<br>
+			<div>
+				<input type="hidden" name = "o-foodpiccount" value = "0">
+				<div></div>
+				<input type="file" class="picfile">
+				<br>
+				<input type="button" onclick="picup(this)" value="上傳">
+			</div>
+		</span>
+	<input type="button" value= "展開/收合" onclick = "modway(this)"  style="font-family: 微軟正黑體;color:white;border-radius:6px; background-color:#FF8800;">
+	<input type="button" value= "刪除" onclick = "delway(this)" style="font-family: 微軟正黑體;color:white;border-radius:6px; background-color:#FF8800;"></div>
+</div>
+
+<div id = "sitediv" hidden>
+	<div class = "siteclass">
+		<div style="color:#666666; font-family: 微軟正黑體;">住宿店名</div><br><input type = "text" name = "o-hotel" readOnly><br>
+		<span>
+			<div style="color:#666666; font-family: 微軟正黑體;">住宿連絡電話</div><br><input type = "text" name = "o-hotelTel"><br>
+			<div style="color:#666666; font-family: 微軟正黑體;">住宿地址</div><br><input type = "text" name = "o-hotelAddress"><br>
+			<div style="color:#666666; font-family: 微軟正黑體;">住宿備註</div><br><input type = "text" name = "o-hotelRemark"><br>
+			<div>
+				<input type="hidden" name = "o-hotelpiccount" value = "0">
+				<div></div>
+				<input type="file" class="picfile">
+				<br>
+				<input type="button" onclick="picup(this)" value="上傳">
+			</div>
+		</span>
+		<input type="button" value= "展開/收合" onclick = "modway(this)"  style="font-family: 微軟正黑體;color:white;border-radius:6px; background-color:#FF8800;">
+		<input type="button" value= "刪除" onclick = "delway(this)"  style="font-family: 微軟正黑體;color:white;border-radius:6px; background-color:#FF8800;">
+	</div>
+</div>
+
+<div id = "pointdiv" hidden>
+	<div class = "pointclass">
+		<div style="color:#666666; font-family: 微軟正黑體;">景點名稱</div><br><input type = "text" name = "o-pointName" readOnly><br>
+		<span>
+			<div style="color:#666666; font-family: 微軟正黑體;">景點說明</div><br><textarea name = "o-pointSummary" cols="40" rows = "5"></textarea><br>
+			<div>
+				<input type="hidden" name = "o-placepiccount" value = "0">
+				<div></div>
+				<input type="file" class="picfile">
+				<br>
+				<input type="button" onclick="picup(this)" value="上傳">
+			</div>
+		</span>
+		<input type="button" value= "展開/收合" onclick = "modway(this)"  style="font-family: 微軟正黑體;color:white;border-radius:6px; background-color:#FF8800;">
+		<input type="button" value= "刪除" onclick = "delway(this)"  style="font-family: 微軟正黑體;color:white;border-radius:6px; background-color:#FF8800;">
+	</div>
+</div>
+
+<div id = "newdaydiv" hidden>
+	<div class  = "newdayclass">
+		<div>
+			<h1></h1>
+			<h2></h2>
+			<input type="hidden" name="o-eatcount" value="0">
+			<input type="hidden" name="o-sitecount" value="0">
+			<input type="hidden" name="o-pointcount" value="0">
+			<div>
+				<img src = "images/move.png">
+				<input type="text" name="o-traffic" style="margin: 0 auto; font-family: 微軟正黑體; width:30%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;">
+			</div>
+			<p><div style="color:#666666; font-family: 微軟正黑體;">簡介</div><br><textarea name = "o-memo" cols="40" rows = "5" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:80px;"></textarea></p>		
+		</div>
+		<div></div>
+	</div>
+</div>
+
+</body>
+</html>
