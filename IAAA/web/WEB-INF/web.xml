@@ -69,6 +69,10 @@
         <servlet-name>SearchUngone</servlet-name>
         <servlet-class>tk.zater.json.SearchUngone</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>logout</servlet-name>
+        <servlet-class>tk.zater.Servlet.logout</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CreateHibernateServer</servlet-name>
         <url-pattern>/CreateHibernateServer</url-pattern>
@@ -128,6 +132,10 @@
     <servlet-mapping>
         <servlet-name>SearchUngone</servlet-name>
         <url-pattern>/SearchUngone</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>logout</servlet-name>
+        <url-pattern>/logout</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
