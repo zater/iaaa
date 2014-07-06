@@ -31,12 +31,24 @@
 </style>
 <script src = "js/jquery-1.11.1.min.js"></script>
 <script>
-		
 $(document).ready(function(){
-	if($("#step1 :input:first").val() != ""){
+	if($("#step1 :input[name='location']").val() != "0"){
 		location.reload();
 	}
 	$("[hidden]").hide(1);
+	submitflag = false;
+	$(window).keydown(function(e){
+		if(e.keyCode==8&&e.target.nodeName=="BODY"){
+			return false;
+		}
+	 });		
+	 $(window).submit(function(){return submitflag});		
+	 $(window).mousedown(function(e){
+		if(e.target.value=="送出"&&e.target.type=="submit") {
+			submitflag = true;
+		}
+	 });
+
 });
 // step1 start
 	function opentag(x){ // step1表格控制
@@ -113,8 +125,12 @@ $(document).ready(function(){
 			contentType: false,
 			processData: false,
 			success:function(res){
-				$(x).parent().children("input:first").val(res);
-				$(x).parent().children("p:last").html("已上傳檔案:"+res);
+				if($.trim(res) == "" || res == "error")  {
+					$(x).parent().children("p:last").html("照片上傳失敗!!請檢查檔案");
+				} else {
+					$(x).parent().children("input:first").val(res);
+					$(x).parent().children("p:last").html("已上傳檔案:"+res);
+				}
 			}
 		});
 	}
@@ -176,16 +192,23 @@ function picup(x) {
 		contentType: false,
 		processData: false,
 		success:function(res){
-			$(x).parent().children(":input:first").val(parseInt($(x).parent().children(":input:first").val())+1);
-			x = $(x).parent().children("div");
-			tag = document.createElement("input");
-			tag.type = "hidden";
-			tag.value = res;
-			tag.name = $(x).parent().children(":input:first").attr("name")+"-pic"+$(x).parent().children(":input:first").val();
-			$(x).append(tag);
-			tag = document.createElement("p");
-			tag.innerHTML = res;
-			$(x).append(tag);
+			if($.trim(res) == "" || res == "error") {
+				x = $(x).parent().children("div");
+				tag = document.createElement("p");
+				tag.innerHTML = "照片上傳失敗!!";
+				$(x).append(tag);
+			} else {
+				$(x).parent().children(":input:first").val(parseInt($(x).parent().children(":input:first").val())+1);
+				x = $(x).parent().children("div");
+				tag = document.createElement("input");
+				tag.type = "hidden";
+				tag.value = res;
+				tag.name = $(x).parent().children(":input:first").attr("name")+"-pic"+$(x).parent().children(":input:first").val();
+				$(x).append(tag);
+				tag = document.createElement("p");
+				tag.innerHTML = "上傳成功："+res;
+				$(x).append(tag);
+			}
 		}
 	});
 }
@@ -375,7 +398,7 @@ function checksubmit(){
 </script>
 </head>
 <body>
-<form id = "main" method="POST" action="addTravel" onsubmit="return checksubmit()">
+<form id = "main" method="POST" action="addTravel" onsubmit="return checksubmit()"}>
 	<div id = "step1">
 		<p><span style="text-align:center;color:#666666; font-family: 微軟正黑體;">標題</span><span style="color:red;font-family: 微軟正黑體;" hidden>請填寫此值</span><br><input type="text" name="topic" style="margin: 0 auto; font-family: 微軟正黑體; width:30%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"></p> 
 		<p><span style="text-align:center;color:#666666; font-family: 微軟正黑體;">主題</span><span style="color:red;font-family: 微軟正黑體;" hidden>請填寫此值</span><br>

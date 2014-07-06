@@ -35,7 +35,8 @@ public class logout extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             request.getSession().removeAttribute("userLV");
             request.getSession().removeAttribute("userid");
-            request.getSession().removeAttribute("username");
+            request.getSession().removeAttribute("Username");
+            response.sendRedirect("tripindex.jsp");
         }
     }
 

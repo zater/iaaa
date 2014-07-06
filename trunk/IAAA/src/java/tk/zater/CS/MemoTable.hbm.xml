@@ -16,7 +16,7 @@
     	</id>
     	<property name="day" not-null="true" length="10"/>
         <property name="planId" not-null="true" length="10"/>
-    	<property name="memo" not-null="false" length="20"/>
+    	<property name="memo" not-null="false" length="200"/>
         <property name="memoTraffic" not-null="false" type="text"/>
     </class>
 
