@@ -7,106 +7,100 @@
     <meta charset="utf-8">
 <script src = "js/jquery-1.11.1.min.js"></script>
 <script>
-<%
-try {
-String lv =  String.valueOf(request.getSession().getAttribute("userLV"));
-out.print("'"+String.valueOf(request.getSession().getAttribute("Username"))+"'");
-if ("5".equals(lv)) {
-
-%>
-
-<%
-}
-} catch (Exception e) {
-}
-
-%>
 	$(document).ready(function(){
 		$("body").toggle();
+		$(window).load(function(){		
+			$("header").find("img:last").parent().click(function(){$("iframe").attr("src","add.jsp");})
+			$("body").toggle();
+			$("nav").find("table").css("border-collapse","collapse");	 
+			$("nav").width($(window).width()*0.95);
+			$("nav").find("img").width($("nav").width()/5-3);
+			$("#theblock").css("padding-left",$(document).innerWidth()/2 + "px");
+			$("#theblock").css("padding-right",$(document).innerWidth()/2 + "px");
+			$("#theblock").css("padding-top",$(document).innerHeight()/2 + "px");
+			$("#theblock").css("padding-bottom",$(document).innerHeight()/2 + "px");
+			$("#theblock").css("left","0");
+			$("#theblock").css("top","0");
+			$("#bodycolor").css("height",$(window).innerHeight()*0.8+"px");
+			$("#bodycolor").css("width",$(window).innerWidth()*0.95+"px");
+			$("footer span img").css("width",$("#bodycolor").css("width"));
+			document.getElementsByTagName("section")[0].style.height=$(window).innerHeight()*0.95+"px";		
+			$("iframe").css("height",$("section").css("height"));
+			$("iframe").css("width",$("section").css("width"));	 
+			document.getElementById("form1").hidden=true;
+			document.getElementById("form2").hidden=true;
+			setTimeout(function(){$("#theblock").hide()},100);
+
+		});
+		 $(window).resize(function(){
+			$("nav table").css("border-collapse","collapse");	 
+			$("nav").width($(window).width()*0.95);
+			$("nav").find("img").width($("nav").width()/5-3);
+			$("#bodycolor").css("height",$(window).innerHeight()*0.8+"px");
+			$("#bodycolor").css("width",$(window).innerWidth()*0.95+"px");
+			$("footer span img").css("width",$("#bodycolor").css("width"));			
+			document.getElementsByTagName("section")[0].style.height=$(window).innerHeight()*0.95+"px";
+			$("iframe").css("height",$("section").css("height"));
+			$("iframe").css("width",$("section").css("width"));
+			document.getElementById("form1").hidden=true;
+			document.getElementById("form2").hidden=true;
+			$("#theblock").hide();	 
+		 });
+		 $(window).keydown(function(e){
+			if(e.keyCode==8&&e.target.nodeName=="BODY"){
+				return false;
+			}
+		});
 	});
-	 $(window).load(function(){		
-		 $("body").toggle();
-		 $("#theblock").css("padding-left",$(window).innerWidth()/2 + "px");
-		 $("#theblock").css("padding-right",$(window).innerWidth()/2 + "px");
-		 $("#theblock").css("padding-top",$(window).innerHeight()/2 + "px");
-		 $("#theblock").css("padding-bottom",$(window).innerHeight()/2 + "px");
-		 $("#theblock").css("left","0");
-		 $("#theblock").css("top","0");
-		$("#bodycolor").css("height",$(window).innerHeight()*0.8+"px");
-		$("#bodycolor").css("width",$(window).innerWidth()*0.95+"px");
-		$("footer span img").css("width",$("#bodycolor").css("width"));
-		 document.getElementsByTagName("section")[0].style.height=$(window).innerHeight()*0.95-$("header").height()- $("footer span img").height()+"px";		
-		 $("iframe").css("height",$("section").css("height"));
-		 $("iframe").css("width",$("section").css("width"));	 
-		 document.getElementById("form1").hidden=true;
-		 document.getElementById("form2").hidden=true;
-		 setTimeout(function(){$("#theblock").toggle()},500);
-	 
-	 });
-	 $(window).resize(function(){
-		$("#bodycolor").css("height",$(window).innerHeight()*0.8+"px");
-		$("#bodycolor").css("width",$(window).innerWidth()*0.95+"px");
-		 $("footer span img").css("width",$("#bodycolor").css("width"));	
-	 document.getElementsByTagName("section")[0].style.height=$(window).innerHeight()*0.95-$("header").height()- $("footer span img").height()+"px";
-	 document.getElementsByTagName("body")[0].style.display = "block";
-	 $("iframe").css("height",$("section").css("height"));
-	 $("iframe").css("width",$("section").css("width"));
-	 document.getElementById("form1").hidden=true;
-	 document.getElementById("form2").hidden=true;
-	 
-	 });
+
 	 function processlogin(){
 		 document.getElementById("form1").hidden=false;
-		 var element = document.getElementById("bodycolor");
-	     element.style.opacity = "0.5";
-	     element.style.filter  = "alpha(opacity=50)";
-		 $("#form1").css("padding-left",($(window).innerWidth()-$("#form1").width())/2 + "px");
-		 $("#form1").css("padding-right",($(window).innerWidth()-$("#form1").width())/2 + "px");
-		 $("#form1").css("padding-top",($(window).innerHeight()-$("#form1").height()-10)/2 + "px");
-		 $("#form1").css("padding-bottom",($(window).innerHeight()-$("#form1").height()-10)/2 + "px");
+		 $("#theblock").toggle();
+		 $("#theblock").css("opacity","0.5");
+		 $("#theblock").css("filter","alpha(opacity=50)");
+		 $("#form1").css("padding-left",($(window).width()-$("#form1").width())/2 + "px");
+		 $("#form1").css("padding-right",($(window).width()-$("#form1").width())/2 + "px");
+		 $("#form1").css("padding-top",($(window).height()-$("#form1").height()-10)/2 + "px");
+		 $("#form1").css("padding-bottom",($(window).height()-$("#form1").height()-10)/2 + "px");
 		 $("#form1").css("left","0");
 		 $("#form1").css("top","0");
 	 }
 	 
 	  function cancellogin(){
 		 document.getElementById("form1").hidden=true;
-		 var element = document.getElementById("bodycolor");
-	     element.style.opacity = "1";
-	     element.style.filter  = "alpha(opacity=100)";
-		 return false;
+		  $("#theblock").toggle();
+
 		 
 	 }
-	 	 function  processregister(){
+	 function  processregister(){
 		 document.getElementById("form2").hidden=false;
-		 var element = document.getElementById("bodycolor");
-	     element.style.opacity = "0.5";
-	     element.style.filter  = "alpha(opacity=50)";
-		 $("#form2").css("padding-left",($(window).innerWidth()-$("#form2").width())/2 + "px");
-		 $("#form2").css("padding-right",($(window).innerWidth()-$("#form2").width())/2 + "px");
-		 $("#form2").css("padding-top",($(window).innerHeight()-$("#form2").height()-10)/2 + "px");
-		 $("#form2").css("padding-bottom",($(window).innerHeight()-$("#form2").height()-10)/2 + "px");
+		 $("#theblock").toggle();
+		 $("#theblock").css("opacity","0.5");
+		 $("#theblock").css("filter","alpha(opacity=50)");
+		 $("#form2").css("padding-left",($(window).width()-$("#form2").width())/2 + "px");
+		 $("#form2").css("padding-right",($(window).width()-$("#form2").width())/2 + "px");
+		 $("#form2").css("padding-top",($(window).height()-$("#form2").height()-10)/2 + "px");
+		 $("#form2").css("padding-bottom",($(window).height()-$("#form2").height()-10)/2 + "px");
 		 $("#form2").css("left","0");
 		 $("#form2").css("top","0");
 		 
 	 }
 	 
 	  function cancelregister(){
+	   $("#theblock").toggle();
 		 document.getElementById("form2").hidden=true;
-		 var element = document.getElementById("bodycolor");
-	     element.style.opacity = "1";
-	     element.style.filter  = alpha(opacity=100);
 		 
 	 }
 	
 	function checkreg(x){
 		
 	}
-	function gocontent(){
-		$("iframe").attr("src","tripcontent.html?id=4")
-	}
+
 	function gosearch(){
 		console.log("test");
 	}
+	
+	
 </script>
 
 	<!--[if lt IE 8]>
@@ -143,14 +137,14 @@ a{text-decoration:none}
 min-width: 200px;
 max-width: 450px;
 position:absolute;
-z-index:1;	
+z-index:2;	
 
 }
 #form2{
 min-width: 200px;
 max-width: 450px;
 position:absolute;
-z-index:1;	
+z-index:2;	
 
 }
 #theblock{
@@ -264,18 +258,45 @@ border-color:white;
                  <td width="79%" rowspan="2"><a href="tripindex.jsp"><img style="width:230px;margin-left:5px;" src="images/logo.png"></img></a></td>
                 <td width="80%">
                 <ul class="menu" style="color:gray;font-size:24px; font-family:微軟正黑體; margin-top:-8%;">
-                            <a class="active" onClick="processlogin()"><span class="style1">登入</span></a>|
-                            <a class="active" onClick="processregister()"><span class="style1">註冊</span></a>| 
+							<%
+							try {
+							String lv =  String.valueOf(request.getSession().getAttribute("userLV"));
+							String name =  String.valueOf(request.getSession().getAttribute("Username"));
+								if ("5".equals(lv)) {								
+									out.print("<span class=\"style1\">"+name+"</span>|");
+									out.print("<a class=\"active\" href=\"logout\"><span class=\" style1\">登出</span></a>");	
+								} else if(name != "null"){
+									out.print("<span class=\"style1\">"+name+"</span>|");
+									out.print("<a class=\"active\" href=\"logout\"><span class=\" style1\">登出</span></a>");
+								} else {
+									out.print("<a class=\"active\" onClick=\"processlogin()\"><span class=\" style1\">登入</span></a>|");
+									out.print("<a class=\"active\" onClick=\"processregister()\"><span class=\"style1\">註冊</span></a>");
+								}
+								
+							} catch (Exception e) {
+								out.print("error");
+							}
+							%>
+							
+							
                         </ul></td>
-                	</tr>
+                </tr>
                 <tr>
                   <td><input style="color:gray; width:30%;margin-left:7%;"type="text" name="search" placeholder="我想去..." size="10" maxlength="10" onclick="gosearch()" readonly >
                 </tr>
                 </table>
                     
                        
-             
-              <nav><img style="width:100%;height:17%;" src="images/pic1.png" onclick="gocontent()"></img></nav>
+              <nav >
+			  <table>
+				<tr>
+					<td><a href="https://www.facebook.com/puyesido"><image src="images/nav1.png" alt=""></a></td>
+					<td><image src="images/nav2.png" alt=""></td>
+					<td><image src="images/nav3.png" alt=""></td>
+					<td><image src="images/nav4.png" alt=""></td>
+					<td><a href="#"><image src="images/nav5.png" alt=""></a></td>
+				</tr>
+			  </table>
               </div>
             </div>
         </div>

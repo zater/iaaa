@@ -14,7 +14,7 @@
     	</id>
     	<property name="memoId" not-null="true" length="10"/>
     	<property name="pointName" not-null="true" length="20"/>
-        <property name="pointSummary" not-null="false" length="200"/>
+        <property name="pointSummary" not-null="false" length="2000"/>
         <property name="pointNum" not-null="true" length="10"/>
        
     </class>
