@@ -29,9 +29,7 @@ public class CreateHibernateServer extends HttpServlet {
         super.init(config); //To change body of generated methods, choose Tools | Templates.
         EnableFileUpload = config.getInitParameter("EnableFileUpload");
         uploadpath = config.getInitParameter("uploadpath");
-        System.out.println("-------------------------");
-        System.out.println(EnableFileUpload);
-        System.out.println(uploadpath);
+
         buildSessionFactory();
 
     }
