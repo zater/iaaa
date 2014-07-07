@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿<%@page import="java.util.List"%>
+<%@page import="tk.zater.CS.plantype"%>
+<%@page import="org.hibernate.Query"%>
+<%@page import="org.hibernate.Session"%>
+<%@page import="tk.zater.CreateSession.CreateHibernateServer"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 
@@ -10,6 +16,9 @@
 	$(document).ready(function(){
 		$("body").toggle();
 		$(window).load(function(){		
+			$("header").find("img:eq(2)").parent().click(function(){$("iframe").attr("src","search.html?userId=1&locationName=&plantype=&pay=&score=");})
+			$("header").find("img:eq(3)").parent().click(function(){$("iframe").attr("src","search.html?userId=&locationName=&plantype=&pay=&score=5");})
+			$("header").find("img:eq(4)").parent().click(function(){$("iframe").attr("src","search.html?userId=&locationName=&plantype=&pay=0&score=");})
 			$("header").find("img:last").parent().click(function(){$("iframe").attr("src","add.jsp");})
 			$("body").toggle();
 			$("nav").find("table").css("border-collapse","collapse");	 
@@ -27,8 +36,9 @@
 			document.getElementsByTagName("section")[0].style.height=$(window).innerHeight()*0.95+"px";		
 			$("iframe").css("height",$("section").css("height"));
 			$("iframe").css("width",$("section").css("width"));	 
-			document.getElementById("form1").hidden=true;
-			document.getElementById("form2").hidden=true;
+			$("#form1").hide();
+			$("#form2").hide();
+			$("#form3").hide();
 			setTimeout(function(){$("#theblock").hide()},100);
 
 		});
@@ -42,8 +52,9 @@
 			document.getElementsByTagName("section")[0].style.height=$(window).innerHeight()*0.95+"px";
 			$("iframe").css("height",$("section").css("height"));
 			$("iframe").css("width",$("section").css("width"));
-			document.getElementById("form1").hidden=true;
-			document.getElementById("form2").hidden=true;
+			$("#form1").hide();
+			$("#form2").hide();
+			$("#form3").hide();
 			$("#theblock").hide();	 
 		 });
 		 $(window).keydown(function(e){
@@ -54,7 +65,7 @@
 	});
 
 	 function processlogin(){
-		 document.getElementById("form1").hidden=false;
+		 $("#form1").show();
 		 $("#theblock").toggle();
 		 $("#theblock").css("opacity","0.5");
 		 $("#theblock").css("filter","alpha(opacity=50)");
@@ -67,13 +78,13 @@
 	 }
 	 
 	  function cancellogin(){
-		 document.getElementById("form1").hidden=true;
+		 $("#form1").hide();
 		  $("#theblock").toggle();
 
 		 
 	 }
 	 function  processregister(){
-		 document.getElementById("form2").hidden=false;
+		 $("#form2").show();
 		 $("#theblock").toggle();
 		 $("#theblock").css("opacity","0.5");
 		 $("#theblock").css("filter","alpha(opacity=50)");
@@ -88,19 +99,63 @@
 	 
 	  function cancelregister(){
 	   $("#theblock").toggle();
-		 document.getElementById("form2").hidden=true;
+		 $("#form2").hide();
 		 
 	 }
 	
-	function checkreg(x){
-		
+	function opensearch(){
+		var q1 = $("#form3 select:eq(0)").val();
+		var q2 = $("#form3 select:eq(1)").val();
+		var q3 = $("#form3 input[name='pay']").val()
+		var q4 = $("#form3 select:eq(2)").val();
+		if(q1 == "其他"){
+			q1="";
+		}
+		if(q2 == "其他") {
+			q2="";
+		}
+		if(q4 == "不限定"){
+			q4="";
+		}
+		if(q3 == ""||isNaN(q3)==true) {
+			q3=0;
+		}
+		$("iframe").attr("src","search.html?userId=&locationName="+q1+"&plantype="+q2+"&pay="+q3+"&score="+q4);		
+		$("#theblock").toggle();
+		$("#form3").hide();
 	}
 
 	function gosearch(){
-		console.log("test");
+		$("#form3").show();
+		 $("#theblock").toggle();
+		 $("#theblock").css("opacity","0.5");
+		 $("#theblock").css("filter","alpha(opacity=50)");
+		 $("#form3").css("padding-left",($(window).width()-$("#form3").width())/2 + "px");
+		 $("#form3").css("padding-right",($(window).width()-$("#form3").width())/2 + "px");
+		 $("#form3").css("padding-top",($(window).height()-$("#form3").height()-10)/2 + "px");
+		 $("#form3").css("padding-bottom",($(window).height()-$("#form3").height()-10)/2 + "px");
+		 $("#form3").css("left","0");
+		 $("#form3").css("top","0");
 	}
-	
-	
+	function closesearch(){
+		$("#theblock").toggle();
+		$("#form3").hide();
+	}
+	<%
+							try {
+							String lv =  String.valueOf(request.getSession().getAttribute("userLV"));
+							String name =  String.valueOf(request.getSession().getAttribute("Username"));
+								if ("5".equals(lv)) {		
+	%>	
+		function setgone(){
+			$("iframe").attr("src","search.html?setgone=0");
+		}
+	<%							
+								} 								
+							} catch (Exception e) {
+								out.print("error");
+							}
+	%>
 </script>
 
 	<!--[if lt IE 8]>
@@ -243,6 +298,73 @@ border-color:white;
 	margin-left:auto;
 	margin-right:auto;
 }
+#form3{
+min-width: 200px;
+max-width: 480px;
+width:520px; 
+position:absolute; height:480px;
+z-index:2;
+}
+
+
+#form3 .style1{
+font-family: "微軟正黑體","新細明體","Adobe 黑体 Std R";
+font-size:15px;
+line-height:18px;
+letter-spacing:1px;
+font-weight:bold;
+}
+#form3 .style3{
+background:url(LittleTrip%20_website/images/.jpg) repeat top left  ;
+}
+
+#form3 a:link {color:gray;}
+a:visited {color:gray;}
+a:hover{color:brown;}
+a:active{color:blue;}
+a{text-decoration:none}
+
+
+#form3 fieldset{
+	
+border:1px groove; 
+border-radius:10px;
+background-color:#D1BBFF;
+border-color:white;	
+
+	
+	}
+#form3 .button {
+   border-top: 1px solid #c4a4e3;
+   background: #553978;
+   background: -webkit-gradient(linear, left top, left bottom, from(#7420d4), to(#553978));
+   background: -webkit-linear-gradient(top, #7420d4, #553978);
+   background: -moz-linear-gradient(top, #7420d4, #553978);
+   background: -ms-linear-gradient(top, #7420d4, #553978);
+   background: -o-linear-gradient(top, #7420d4, #553978);
+   padding: 7.5px 15px;
+   -webkit-border-radius: 9px;
+   -moz-border-radius: 9px;
+   border-radius: 9px;
+   -webkit-box-shadow: rgba(0,0,0,1) 0 1px 0;
+   -moz-box-shadow: rgba(0,0,0,1) 0 1px 0;
+   box-shadow: rgba(0,0,0,1) 0 1px 0;
+   text-shadow: rgba(0,0,0,.4) 0 1px 0;
+   color: white;
+   font-size: 19px;
+   font-family: 微軟正黑體;
+   text-decoration: none;
+   vertical-align: middle;
+   }
+#form3 .button:hover {
+   border-top-color: #6f46b0;
+   background: #6f46b0;
+   color: #ccc;
+   }
+#form3 .button:active {
+   border-top-color: #8019e0;
+   background: #8019e0;
+   }
 
 </style>
 </head>
@@ -262,7 +384,8 @@ border-color:white;
 							try {
 							String lv =  String.valueOf(request.getSession().getAttribute("userLV"));
 							String name =  String.valueOf(request.getSession().getAttribute("Username"));
-								if ("5".equals(lv)) {								
+								if ("5".equals(lv)) {						
+									out.print("<a class='active' onclick='setgone()'><span class='style1'>審核</span></a>|");
 									out.print("<span class=\"style1\">"+name+"</span>|");
 									out.print("<a class=\"active\" href=\"logout\"><span class=\" style1\">登出</span></a>");	
 								} else if(name != "null"){
@@ -291,9 +414,9 @@ border-color:white;
 			  <table>
 				<tr>
 					<td><a href="https://www.facebook.com/puyesido"><image src="images/nav1.png" alt=""></a></td>
-					<td><image src="images/nav2.png" alt=""></td>
-					<td><image src="images/nav3.png" alt=""></td>
-					<td><image src="images/nav4.png" alt=""></td>
+					<td><a href="#"><image src="images/nav2.png" alt=""></a></td>
+					<td><a href="#"><image src="images/nav3.png" alt=""></a></td>
+					<td><a href="#"><image src="images/nav4.png" alt=""></a></td>
 					<td><a href="#"><image src="images/nav5.png" alt=""></a></td>
 				</tr>
 			  </table>
@@ -322,7 +445,7 @@ border-color:white;
             </div>
             
                 	<div class="maxheight indent-bot">
-                      <iframe src="add.jsp"></iframe>
+                      <iframe src="content.jsp"></iframe>
                 	</div>
                 </article>
           
@@ -344,10 +467,10 @@ border-color:white;
 <img style="width:106%;margin-left:-3%;margin-top:-2%;" src="images/pic30.png"></img><br/><br/>
 <img style="width:100px;margin-left:5px;" src="images/pic34.png"></img><br/>
   
-  <input type="text" id="UserAccount" size="20"  name="accountName" placeholder="使用者ID"  style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#87CECB; height:25px;" />
+  <input type="text" id="UserAccount" size="20"  name="accountName" placeholder="使用者ID"  style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#87CECB; height:25px;" required >
 </div>
 <p align="center">
-<input type="password" id="UserPass" size="20" name="pwd" placeholder="密碼"  style="font-family: 微軟正黑體; width:40%; border-radius:5px; border-style:solid; border-color:#87CECB;height:25px;"/><p align="center">
+<input type="password" id="UserPass" size="20" name="pwd" placeholder="密碼"  style="font-family: 微軟正黑體; width:40%; border-radius:5px; border-style:solid; border-color:#87CECB;height:25px;" required><p align="center">
 
 <div align="center">
   <table width="200">
@@ -367,40 +490,40 @@ border-color:white;
 </form>	
 
 
-<form id="form2" method = "GET" action="reg" onsubmit = "return checkreg(this)">
+<form id="form2" method = "GET" action="reg">
 	<fieldset id="fieldset2">
 		<p align="center">
 		<img style="width:106%;margin-left:-3%;margin-top:-5%;" src="images/pic32.png"></img><br/><br/>
 		<img style="width:100px;margin-left:5px;" src="images/pic34.png"></img><br/>	  
-		<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-30%;">帳號</span><br/><input type="text" id="accountName" name="accountName" size="20" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"/>
+		<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-30%;">帳號</span><br/><input type="text" id="accountName" name="accountName" size="20" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;" required>
 		</p>
 		<p align="center">
 		<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-20%;">密碼(6-20碼)</span><br/>
-		<input type="password" id="UserPass" name = "pwd" size="20" style="font-family: 微軟正黑體; width:40%; border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"/>
+		<input type="password" id="UserPass" name = "pwd" size="20" style="font-family: 微軟正黑體; width:40%; border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;" required>
 		</p>
 		<p align="center">
 		<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-28%;">確認密碼</span><br/>
-		<input type="password" id="ConfirmPass" size="20" style="font-family: 微軟正黑體; width:40%; border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"/>
+		<input type="password" id="ConfirmPass" size="20" style="font-family: 微軟正黑體; width:40%; border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;" required>
 		</p>
 		<p align="center">
 			<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-32%;">姓名</span><br/>
-			<input type="text" name="userName" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"/>
+			<input type="text" name="userName" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;" required>
 		</p>
 		<p align="center">
 			<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-32%;">E-mail</span><br/>
-			<input type="text" id="email" name="email" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"/>
+			<input type="text" id="email" name="email" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;" required>
 		</p>
 		<p align="center">
 			<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-35%;">地址</span><br/>
-			<input type="text" id="address" name="address" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"/>
+			<input type="text" id="address" name="address" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;">
 		</p>
 		<p align="center">
 			<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-35%;">電話</span><br/>
-			<input type="text" name="tel" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"/>
+			<input type="text" name="tel" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;">
 		</p>
 		<p align="center">
 			<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-35%;">自我介紹</span><br/>
-			<input type="text" name="inrtoduction" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"/>
+			<textarea name="inrtoduction" cols="30" rows = "3" style="margin: 0 auto; font-family: 微軟正黑體; width:36%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:50px;"></textarea>
 		</p>
 		<div align="center">		  
 			<table>
@@ -415,5 +538,76 @@ border-color:white;
 </form>	
 <div id="theblock">
 </div>
+
+<form id="form3" onsubmit="return false">
+<fieldset>
+<div align="center">
+<img style="width:106%;margin-left:-3%;margin-top:-2%;" src="images/pic35.png"></img><br/><br/>
+<img style="width:100px;margin-left:5px;" src="images/pic34.png"></img><br/>
+<p><span style="text-align:center;color:#666666; font-family: 微軟正黑體;font-size:17px;margin-left:-13%;">地點:</span>
+		<select style="margin: 0 auto; font-family: 微軟正黑體; width:20%;border-radius:5px; border-style:solid; border-color:#800080;height:25px;color:#666666;font-size:14px;">
+				<option>基隆市</option>
+                <option>臺北市</option>
+                <option>新北市</option>
+                <option>桃園縣</option>
+                <option>新竹市</option>
+                <option>新竹縣</option>
+                <option>苗栗縣</option>
+                <option>臺中市</option>
+                <option>南投縣</option>
+                <option>彰化縣</option>
+                <option>雲林縣</option>
+                <option>嘉義市</option>
+                <option>嘉義縣</option>
+                <option>臺南市</option>
+                <option>高雄市</option>
+                <option>屏東縣</option>
+                <option>宜蘭縣</option>
+                <option>花蓮縣</option>
+                <option>澎湖縣</option>
+                <option>金門縣</option>
+                <option>連江縣</option>
+				<option selected="true">其他</option>
+		</select>
+</p>   
+<p><span style="text-align:center;color:#666666; font-family: 微軟正黑體;font-size:17px;margin-left:-6%;">主題類型:</span>
+		<select style="margin: 0 auto; font-family: 微軟正黑體; width:20%;border-radius:5px; border-style:solid; border-color:#800080;height:25px;color:#666666;font-size:14px;">
+                <option selected="true">其他</option>
+				<%
+				Session sess = CreateHibernateServer.getSessionFactory().openSession();
+				Query qr = sess.createQuery("from plantype");
+				List<plantype> plan = qr.list();
+				for(int i = 0; i < plan.size();i++) {
+					out.print("<option>"+plan.get(i).getTypename()+"</option>");
+				}
+				%>
+		</select>
+</p>
+<p><span style="text-align:center;color:#666666; font-family: 微軟正黑體;font-size:17px;">價格:小於</span>
+ <input type="number" name="pay" min="1" size="15" style="margin: 0 auto; font-family: 微軟正黑體; width:20%;border-radius:5px; border-style:solid; border-color:#800080; height:20px;"/>
+<span style="text-align:center;color:#666666; font-family: 微軟正黑體;font-size:17px;">元</span>
+</p>
+<p><span style="text-align:center;color:#666666; font-family: 微軟正黑體;font-size:17px;margin-left:-6%;">評比星等:</span>
+		<select style="margin: 0 auto; font-family: 微軟正黑體; width:20%;border-radius:5px; border-style:solid; border-color:#800080;height:25px;color:#666666;font-size:14px;">
+			<option selected="true">不限定</option>
+			<option value="1">一顆星</option>
+			<option value="2">二顆星</option>
+			<option value="3">三顆星</option>
+			<option value="4">四顆星</option>
+			<option value="5">五顆星</option>
+		</select>
+</p>     
+</div>
+
+<div align="center">
+<table>
+<tr> 
+<td><input type="button" class="button" onClick="opensearch()" value="送出" /></p></td>
+<td><input type="button" class="button" onClick="closesearch()" value="返回" /></p></td>
+</tr></table>
+</div>
+</fieldset>
+</form>	
+
 </body>
 </html>

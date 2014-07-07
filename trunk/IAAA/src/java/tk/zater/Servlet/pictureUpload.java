@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -40,18 +41,22 @@ public class pictureUpload extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             SmartUpload smart = new SmartUpload();
             smart.initialize(this.getServletConfig(), request, response);
-            smart.setAllowedFilesList(CreateHibernateServer.EnableFileUpload);
+
             smart.upload();
             String FileName = new CreateFileName().GetName(request.getRemoteAddr());
             String attachinfo = smart.getFiles().getFile(0).getFileName();
-            String fileext[] = attachinfo.split("\\.");
-            if (!new File(this.getServletContext().getRealPath("/") +File.separator + CreateHibernateServer.uploadpath).exists()) {
-                new File(this.getServletContext().getRealPath("/")+File.separator  + CreateHibernateServer.uploadpath).mkdirs();
-            }
-            smart.getFiles().getFile(0).saveAs(this.getServletContext().getRealPath("/")+ File.separator+CreateHibernateServer.uploadpath + File.separator + FileName + "." + fileext[1]);
-            out.print( CreateHibernateServer.uploadpath + File.separator +FileName+ "." + fileext[1]);
-        } catch(Exception e){
+            String fileext = smart.getFiles().getFile(0).getFileExt();
+            //String fileName = new String(smart.getFiles().getFile(0).getFileName().getBytes(), "UTF-8").toLowerCase();
+            if (CreateHibernateServer.EnableFileUpload.toLowerCase().contains(fileext)==true) {
 
+                if (!new File(this.getServletContext().getRealPath("/") + File.separator + CreateHibernateServer.uploadpath).exists()) {
+                    new File(this.getServletContext().getRealPath("/") + File.separator + CreateHibernateServer.uploadpath).mkdirs();
+                }
+                smart.getFiles().getFile(0).saveAs(this.getServletContext().getRealPath("/") + File.separator + CreateHibernateServer.uploadpath + File.separator + FileName + "." + fileext);
+                out.print(CreateHibernateServer.uploadpath + File.separator + FileName + "." + fileext);
+            } else {
+                out.print("error!");
+            }
         }
     }
 

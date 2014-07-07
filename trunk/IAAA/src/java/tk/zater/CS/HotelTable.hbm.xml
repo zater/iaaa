@@ -18,7 +18,7 @@
     	<property name="hotelName" not-null="true" length="10"/>
     	<property name="hotelTel" not-null="false" length="20"/>
         <property name="hotelAddress" not-null="false" length="20"/>
-    	<property name="htotelRemark" not-null="false" length="50"/>
+    	<property name="htotelRemark" not-null="false" length="200"/>
     </class>
 
 </hibernate-mapping>

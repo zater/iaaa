@@ -18,7 +18,7 @@
         <property name="foodTel" not-null="false" length="20"/>
     	<property name="foodAddress" not-null="false" length="50"/>
         <property name="foodTime" not-null="false" length="50"/>
-        <property name="foodRemark" not-null="false" length="50"/>
+        <property name="foodRemark" not-null="false" length="200"/>
     </class>
 
 </hibernate-mapping>

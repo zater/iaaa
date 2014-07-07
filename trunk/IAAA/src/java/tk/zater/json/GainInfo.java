@@ -84,6 +84,7 @@ public class GainInfo extends HttpServlet {
             for (int i = 0; i < memodays.size(); i++) {
                 MemoTable temp = memodays.get(i);
                 JSONObject memoday1 = new JSONObject();
+                 memoday1.put("memo", temp.getMemo());
                 memoday1.put("memoTraffic", temp.getMemoTraffic());
                 memoday1.put("Day", temp.getDay());
                 memoday1.put("ID", temp.getId());

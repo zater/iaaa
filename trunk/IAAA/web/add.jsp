@@ -32,6 +32,9 @@
 <script src = "js/jquery-1.11.1.min.js"></script>
 <script>
 $(document).ready(function(){
+	if($(window.parent.document)[0]["location"]["pathname"] != "/IAAA/tripindex.jsp"){
+		window.location = "tripindex.jsp";
+	}
 	if($("#step1 :input[name='location']").val() != "0"){
 		location.reload();
 	}
@@ -124,7 +127,12 @@ $(document).ready(function(){
 			cache: false,
 			contentType: false,
 			processData: false,
+			beforeSend:function(){
+				$(x).parent().children("p:last").html("照片上傳中");
+				$("#step1").children(":input:last").attr("disabled",true);
+			},
 			success:function(res){
+				$("#step1").children(":input:last").attr("disabled",false);
 				if($.trim(res) == "" || res == "error")  {
 					$(x).parent().children("p:last").html("照片上傳失敗!!請檢查檔案");
 				} else {
@@ -191,7 +199,12 @@ function picup(x) {
 		cache: false,
 		contentType: false,
 		processData: false,
+		beforeSend:function(){
+			$(x).parent().children("p:last").html("照片上傳中");
+			$("#addmain").children(":input:last").attr("disabled",true);
+		},
 		success:function(res){
+			$("#addmain").children(":input:last").attr("disabled",false);
 			if($.trim(res) == "" || res == "error") {
 				x = $(x).parent().children("div");
 				tag = document.createElement("p");

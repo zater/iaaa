@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-tw">
+<head>
+	<meta charset="utf-8">
+	<style>
+		body{margin-left:10%}
+	</style>
+	<script src = "js/jquery-1.11.1.min.js"></script>
+	<script>
+		$(document).ready(function(){	
+			if($(window.parent.document)[0]["location"]["pathname"] != "/IAAA/tripindex.jsp"){
+				window.location = "tripindex.jsp";
+			}
+			if(window.location.search=="?setgone=0"){
+				$.getJSON("SearchUngone",function(jdata){
+				if($(jdata["location"]).length==0){
+					$("body").html("<p style='text-align:center'>沒有需要審核的文章</p>");
+				}
+				for(var i = 0; i < $(jdata["location"]).length; i++){
+					test = jdata;
+					var tag = $(jdata["location"]);
+					var div = document.createElement("a");
+					$(div).attr("href","tripcontent.jsp?id="+tag[i].id);
+					var img = document.createElement("img");
+					$(img).attr("src",tag[i].cover);
+					$(img).attr("alt","nocover");
+					$(img).height($(window).innerHeight()/10);			
+					var p = document.createElement("p");
+					$(p).css("border-style","solid");
+					$(p).append($(img));
+					p.innerHTML += "主題：" + tag[i].Topic;		
+					p.innerHTML += "作者：" + tag[i].UserID;		
+					p.innerHTML += "旅程天數：" + tag[i].Days;
+					p.innerHTML += "旅程特色：" + tag[i].Characteristic;
+					$(div).append($(p));
+					$("body").append($(div));
+				}
+				});		
+			} else {
+				$.getJSON("Search"+window.location.search,function(jdata){
+				if($(jdata["location"]).length==0){
+					$("body").html("<p style='text-align:center'>沒有符合的搜尋</p>");
+				}
+				for(var i = 0; i < $(jdata["location"]).length; i++){
+					test = jdata;
+					var tag = $(jdata["location"]);
+					var div = document.createElement("a");
+					$(div).attr("href","tripcontent.jsp?id="+tag[i].id);
+					var img = document.createElement("img");
+					$(img).attr("src",tag[i].cover);
+					$(img).attr("alt","nocover");
+					$(img).height($(window).innerHeight()/10);			
+					var p = document.createElement("p");
+					$(p).css("border-style","solid");
+					$(p).append($(img));
+					p.innerHTML += "主題：" + tag[i].Topic;		
+					p.innerHTML += "作者：" + tag[i].UserID;		
+					p.innerHTML += "旅程天數：" + tag[i].Days;
+					p.innerHTML += "旅程特色：" + tag[i].Characteristic;
+					$(div).append($(p));
+					$("body").append($(div));
+				}
+				});		
+			}
+		});
+	</script>
+</head>
+<body>
+</body>
+</html>
