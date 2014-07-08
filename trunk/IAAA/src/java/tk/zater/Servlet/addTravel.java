@@ -140,7 +140,7 @@ public class addTravel extends HttpServlet {
 
                 for (int j = 1; j <= pointcount; j++) {
                     String PointName = request.getParameter("day" + i + "-pointName-" + j);
-                    String PointSummary = request.getParameter("day" + i + "-hotelTel-" + j);
+                    String PointSummary = request.getParameter("day" + i + "-pointSummary-" + j);
 
                     PointTable point = new PointTable();
                     point.setMemoId(memoID);

@@ -41,6 +41,8 @@ public class Gainplantype extends HttpServlet {
         
             out.println(    JSONArray.fromObject(qr.list()));
                    
+        } catch(Exception e){
+            
         }
     }
 

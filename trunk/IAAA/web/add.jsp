@@ -133,8 +133,8 @@ $(document).ready(function(){
 			},
 			success:function(res){
 				$("#step1").children(":input:last").attr("disabled",false);
-				if($.trim(res) == "" || res == "error")  {
-					$(x).parent().children("p:last").html("照片上傳失敗!!請檢查檔案");
+				if($.trim(res) == "" || res == "error!")  {
+					$(x).parent().children("p:last").html("照片上傳失敗!!請檢查檔案、副檔名");
 				} else {
 					$(x).parent().children("input:first").val(res);
 					$(x).parent().children("p:last").html("已上傳檔案:"+res);
@@ -205,10 +205,10 @@ function picup(x) {
 		},
 		success:function(res){
 			$("#addmain").children(":input:last").attr("disabled",false);
-			if($.trim(res) == "" || res == "error") {
+			if($.trim(res) == "" || res == "error!") {
 				x = $(x).parent().children("div");
 				tag = document.createElement("p");
-				tag.innerHTML = "照片上傳失敗!!";
+				tag.innerHTML = "照片"+$.trim($(x).parent().children(":file")[0].files[0].name)+"上傳失敗!!請檢查檔案、副檔名";
 				$(x).append(tag);
 			} else {
 				$(x).parent().children(":input:first").val(parseInt($(x).parent().children(":input:first").val())+1);
@@ -413,7 +413,7 @@ function checksubmit(){
 <body>
 <form id = "main" method="POST" action="addTravel" onsubmit="return checksubmit()"}>
 	<div id = "step1">
-		<p><span style="text-align:center;color:#666666; font-family: 微軟正黑體;">標題</span><span style="color:red;font-family: 微軟正黑體;" hidden>請填寫此值</span><br><input type="text" name="topic" style="margin: 0 auto; font-family: 微軟正黑體; width:30%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"></p> 
+		<p><span style="text-align:center;color:#666666; font-family: 微軟正黑體;">標題</span><span style="color:red;font-family: 微軟正黑體;" hidden>請填寫此值</span><br><input type="text" name="topic" style="margin: 0 auto; font-family: 微軟正黑體; width:30%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;" maxlength="100"></p> 
 		<p><span style="text-align:center;color:#666666; font-family: 微軟正黑體;">主題</span><span style="color:red;font-family: 微軟正黑體;" hidden>請填寫此值</span><br>
 			<select onchange="step1select(this)" style="margin: 0 auto; font-family: 微軟正黑體; width:10%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;color:#666666;font-size:14px;">
 				<%
@@ -426,9 +426,9 @@ function checksubmit(){
 				%>
 				<option selected="true">其他</option>
 			</select>
-			<input type="text" name="plantype" style="margin: 0 auto; font-family: 微軟正黑體; width:30%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;">
+			<input type="text" name="plantype" style="margin: 0 auto; font-family: 微軟正黑體; width:30%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;" maxlength="20">
 		</p>
-		<p><span style="text-align:center;color:#666666; font-family: 微軟正黑體;">特色</span><span style="color:red;font-family: 微軟正黑體;" hidden>請填寫此值</span><br><input type="text" name="characteristic" style="margin: 0 auto; font-family: 微軟正黑體; width:30%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;"></p>
+		<p><span style="text-align:center;color:#666666; font-family: 微軟正黑體;">特色</span><span style="color:red;font-family: 微軟正黑體;" hidden>請填寫此值</span><br><input type="text" name="characteristic" style="margin: 0 auto; font-family: 微軟正黑體; width:30%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;" maxlength="20"></p>
 	  <p><span style="text-align:center;color:#666666; font-family: 微軟正黑體;">用途</span>
 			<select onchange="opentag(this)" style="margin: 0 auto; font-family: 微軟正黑體; width:10%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;color:#666666;text-align:center;font-size:14px;">
 				<option>上架</option>
@@ -486,12 +486,12 @@ function checksubmit(){
 
 <div id = "eatdiv" hidden>
 	<div class = "eatclass">
-		<div style="color:#666666; font-family: 微軟正黑體;">美食店名</div><br><input type = "text" name = "o-foodStore" readOnly><br>
+		<div style="color:#666666; font-family: 微軟正黑體;">美食店名</div><br><input type = "text" name = "o-foodStore" readOnly maxlength="20"><br>
 		<span>
-			<div style="color:#666666; font-family: 微軟正黑體;">美食連絡電話</div><br><input type = "text" name = "o-foodTel"><br>
-			<div style="color:#666666; font-family: 微軟正黑體;">美食店址</div><br><input type = "text" name = "o-foodAddress"><br>
-			<div style="color:#666666; font-family: 微軟正黑體;">美食營業時間</div><br><input type = "text" name = "o-foodTime"><br>
-			<div style="color:#666666; font-family: 微軟正黑體;">美食備註</div><br><input type = "text" name = "o-foodRemark">	<br>
+			<div style="color:#666666; font-family: 微軟正黑體;">美食連絡電話</div><br><input type = "text" name = "o-foodTel" maxlength="20"><br>
+			<div style="color:#666666; font-family: 微軟正黑體;">美食店址</div><br><input type = "text" name = "o-foodAddress" maxlength="50"><br>
+			<div style="color:#666666; font-family: 微軟正黑體;">美食營業時間</div><br><input type = "text" name = "o-foodTime" maxlength="50"><br>
+			<div style="color:#666666; font-family: 微軟正黑體;">美食備註</div><br><input type = "text" name = "o-foodRemark" maxlength="200">	<br>
 			<div>
 				<input type="hidden" name = "o-foodpiccount" value = "0">
 				<div></div>
@@ -506,11 +506,11 @@ function checksubmit(){
 
 <div id = "sitediv" hidden>
 	<div class = "siteclass">
-		<div style="color:#666666; font-family: 微軟正黑體;">住宿店名</div><br><input type = "text" name = "o-hotel" readOnly><br>
+		<div style="color:#666666; font-family: 微軟正黑體;">住宿店名</div><br><input type = "text" name = "o-hotel" readOnly maxlength="10"><br>
 		<span>
-			<div style="color:#666666; font-family: 微軟正黑體;">住宿連絡電話</div><br><input type = "text" name = "o-hotelTel"><br>
-			<div style="color:#666666; font-family: 微軟正黑體;">住宿地址</div><br><input type = "text" name = "o-hotelAddress"><br>
-			<div style="color:#666666; font-family: 微軟正黑體;">住宿備註</div><br><input type = "text" name = "o-hotelRemark"><br>
+			<div style="color:#666666; font-family: 微軟正黑體;">住宿連絡電話</div><br><input type = "text" name = "o-hotelTel" maxlength="20"><br>
+			<div style="color:#666666; font-family: 微軟正黑體;">住宿地址</div><br><input type = "text" name = "o-hotelAddress" maxlength="20"><br>
+			<div style="color:#666666; font-family: 微軟正黑體;">住宿備註</div><br><input type = "text" name = "o-hotelRemark" maxlength="200"><br>
 			<div>
 				<input type="hidden" name = "o-hotelpiccount" value = "0">
 				<div></div>
@@ -526,9 +526,9 @@ function checksubmit(){
 
 <div id = "pointdiv" hidden>
 	<div class = "pointclass">
-		<div style="color:#666666; font-family: 微軟正黑體;">景點名稱</div><br><input type = "text" name = "o-pointName" readOnly><br>
+		<div style="color:#666666; font-family: 微軟正黑體;">景點名稱</div><br><input type = "text" name = "o-pointName" readOnly maxlength="20"><br>
 		<span>
-			<div style="color:#666666; font-family: 微軟正黑體;">景點說明</div><br><textarea name = "o-pointSummary" cols="40" rows = "5"></textarea><br>
+			<div style="color:#666666; font-family: 微軟正黑體;">景點說明</div><br><textarea name = "o-pointSummary" cols="40" rows = "5" maxlength="200"></textarea><br>
 			<div>
 				<input type="hidden" name = "o-placepiccount" value = "0">
 				<div></div>
@@ -552,9 +552,9 @@ function checksubmit(){
 			<input type="hidden" name="o-pointcount" value="0">
 			<div>
 				<img src = "images/move.png">
-				<input type="text" name="o-traffic" style="margin: 0 auto; font-family: 微軟正黑體; width:30%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;">
+				<input type="text" name="o-traffic" style="margin: 0 auto; font-family: 微軟正黑體; width:30%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;" maxlength="100">
 			</div>
-			<p><div style="color:#666666; font-family: 微軟正黑體;">簡介</div><br><textarea name = "o-memo" cols="40" rows = "5" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:80px;"></textarea></p>		
+			<p><div style="color:#666666; font-family: 微軟正黑體;">簡介</div><br><textarea name = "o-memo" maxlength="200" cols="40" rows = "5" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:80px;"></textarea></p>		
 		</div>
 		<div></div>
 	</div>

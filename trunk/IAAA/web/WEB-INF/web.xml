@@ -73,6 +73,10 @@
         <servlet-name>logout</servlet-name>
         <servlet-class>tk.zater.Servlet.logout</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>hot</servlet-name>
+        <servlet-class>tk.zater.Servlet.hot</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CreateHibernateServer</servlet-name>
         <url-pattern>/CreateHibernateServer</url-pattern>
@@ -136,6 +140,10 @@
     <servlet-mapping>
         <servlet-name>logout</servlet-name>
         <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>hot</servlet-name>
+        <url-pattern>/hot</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

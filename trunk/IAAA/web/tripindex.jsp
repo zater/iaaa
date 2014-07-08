@@ -5,7 +5,7 @@
 <%@page import="tk.zater.CreateSession.CreateHibernateServer"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-tw">
 <head>
 
 <link rel="icon" href="images/logo.png" type="image/png" />
@@ -16,11 +16,40 @@
 	$(document).ready(function(){
 		$("body").toggle();
 		$(window).load(function(){		
-			$("header").find("img:eq(2)").parent().click(function(){$("iframe").attr("src","search.html?userId=1&locationName=&plantype=&pay=&score=");})
-			$("header").find("img:eq(3)").parent().click(function(){$("iframe").attr("src","search.html?userId=&locationName=&plantype=&pay=&score=5");})
-			$("header").find("img:eq(4)").parent().click(function(){$("iframe").attr("src","search.html?userId=&locationName=&plantype=&pay=0&score=");})
-			$("header").find("img:last").parent().click(function(){$("iframe").attr("src","add.jsp");})
-			$("body").toggle();
+			<%
+							try {
+							String lv =  String.valueOf(request.getSession().getAttribute("userLV"));
+							String name =  String.valueOf(request.getSession().getAttribute("Username"));
+								if ("5".equals(lv)) { 
+	%>	
+									$("header").find("img:eq(2)").parent().click(function(){$("iframe").attr("src","search.html?userId=123456&locationName=&plantype=&pay=&score=");});
+			$("header").find("img:eq(3)").parent().click(function(){$("iframe").attr("src","search.html?userId=&locationName=&plantype=&pay=&score=3");});
+			$("header").find("img:eq(4)").parent().click(function(){$("iframe").attr("src","search.html?userId=&locationName=&plantype=&pay=0&score=");});
+			$("header").find("img:last").parent().click(function(){$("iframe").attr("src","add.jsp");});
+			
+								
+									
+								
+	<% } else if(name != "null"){	
+	
+	%>	
+									$("header").find("img:eq(2)").parent().click(function(){$("iframe").attr("src","search.html?userId=123456&locationName=&plantype=&pay=&score=");});
+			$("header").find("img:eq(3)").parent().click(function(){$("iframe").attr("src","search.html?userId=&locationName=&plantype=&pay=&score=3");});
+			$("header").find("img:eq(4)").parent().click(function(){$("iframe").attr("src","search.html?userId=&locationName=&plantype=&pay=0&score=");});
+			$("header").find("img:last").parent().click(function(){$("iframe").attr("src","add.jsp");})		;
+	<%	 } else {
+	%>
+			$("header").find("img:eq(2)").parent().click(function(){processlogin()});
+			$("header").find("img:eq(3)").parent().click(function(){processlogin()});
+			$("header").find("img:eq(4)").parent().click(function(){processlogin()});
+			$("header").find("img:last").parent().click(function(){processlogin()});
+	<%			}								
+							} catch (Exception e) {
+								out.print("error");
+							}
+	%>
+			
+			$("body").toggle();		
 			$("nav").find("table").css("border-collapse","collapse");	 
 			$("nav").width($(window).width()*0.95);
 			$("nav").find("img").width($("nav").width()/5-3);
@@ -36,6 +65,7 @@
 			document.getElementsByTagName("section")[0].style.height=$(window).innerHeight()*0.95+"px";		
 			$("iframe").css("height",$("section").css("height"));
 			$("iframe").css("width",$("section").css("width"));	 
+			
 			$("#form1").hide();
 			$("#form2").hide();
 			$("#form3").hide();
@@ -75,6 +105,8 @@
 		 $("#form1").css("padding-bottom",($(window).height()-$("#form1").height()-10)/2 + "px");
 		 $("#form1").css("left","0");
 		 $("#form1").css("top","0");
+		 $("#form1 :text").val("");
+		 $("#form1 :input[type='password']").val("");
 	 }
 	 
 	  function cancellogin(){
@@ -94,7 +126,9 @@
 		 $("#form2").css("padding-bottom",($(window).height()-$("#form2").height()-10)/2 + "px");
 		 $("#form2").css("left","0");
 		 $("#form2").css("top","0");
-		 
+		 $("#form2 :text").val("");
+		 $("#form2 :input[type='password']").val("");
+		 $("#form2 textarea").val("");
 	 }
 	 
 	  function cancelregister(){
@@ -136,6 +170,18 @@
 		 $("#form3").css("padding-bottom",($(window).height()-$("#form3").height()-10)/2 + "px");
 		 $("#form3").css("left","0");
 		 $("#form3").css("top","0");
+	}
+	function checkreg(){
+		if($("#form2 :input[type='password']:eq(0)").val() != $("#form2 :input[type='password']:eq(1)").val()){
+			$("#form2 :input[type='password']:eq(0)").val("");
+			$("#form2 :input[type='password']:eq(1)").val("");
+			return false;
+		} 
+		
+	}
+	function closeloginopenreg(){
+		cancellogin();
+		processregister();
 	}
 	function closesearch(){
 		$("#theblock").toggle();
@@ -182,8 +228,8 @@ font-weight:bold;
 
 a:link {color:gray;}
 a:visited {color:gray;}
-a:hover{color:brown;}
-a:active{color:blue;}
+a:hover{color:#f76d2d;}
+a:active{color:black;}
 a{text-decoration:none}
 
 
@@ -405,7 +451,7 @@ border-color:white;
                         </ul></td>
                 </tr>
                 <tr>
-                  <td><input style="color:gray; width:30%;margin-left:7%;"type="text" name="search" placeholder="我想去..." size="10" maxlength="10" onclick="gosearch()" readonly >
+                  <td><input style="color:gray; width:35%;height:25px;margin-left:7%;"type="text" name="search" placeholder="我想去..." size="10" maxlength="10" onclick="gosearch()" readonly >
                 </tr>
                 </table>
                     
@@ -467,15 +513,15 @@ border-color:white;
 <img style="width:106%;margin-left:-3%;margin-top:-2%;" src="images/pic30.png"></img><br/><br/>
 <img style="width:100px;margin-left:5px;" src="images/pic34.png"></img><br/>
   
-  <input type="text" id="UserAccount" size="20"  name="accountName" placeholder="使用者ID"  style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#87CECB; height:25px;" required >
+  <input type="text" id="UserAccount" size="20"  name="accountName" placeholder="使用者ID"  style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#87CECB; height:25px;" required maxlength="15">
 </div>
 <p align="center">
-<input type="password" id="UserPass" size="20" name="pwd" placeholder="密碼"  style="font-family: 微軟正黑體; width:40%; border-radius:5px; border-style:solid; border-color:#87CECB;height:25px;" required><p align="center">
+<input type="password" id="UserPass" size="20" name="pwd" placeholder="密碼"  style="font-family: 微軟正黑體; width:40%; border-radius:5px; border-style:solid; border-color:#87CECB;height:25px;" required><p align="center" maxlength="20">
 
 <div align="center">
   <table width="200">
     <tr>
-      <td> <a href="#"><span style="color:#000088;font-size:16px;font-family: 微軟正黑體;">忘記密碼?</span></a></td>
+      <td> <a onclick="closeloginopenreg()"><span style="color:#000088;font-size:16px;font-family: 微軟正黑體;">註冊帳號</span></a></td>
       </tr>
   </table>
 </div>
@@ -490,52 +536,52 @@ border-color:white;
 </form>	
 
 
-<form id="form2" method = "GET" action="reg">
+<form id="form2" method = "GET" action="reg" onsubmit="return checkreg()">
 	<fieldset id="fieldset2">
-		<p align="center">
+		<p align="center">	
 		<img style="width:106%;margin-left:-3%;margin-top:-5%;" src="images/pic32.png"></img><br/><br/>
-		<img style="width:100px;margin-left:5px;" src="images/pic34.png"></img><br/>	  
-		<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-30%;">帳號</span><br/><input type="text" id="accountName" name="accountName" size="20" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;" required>
+		<img style="width:100px;margin-left:5px;" src="images/pic34.png"></img><br/>
+		<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-16%;">帳號(最多15碼)</span><br/><input type="text" id="accountName" name="accountName" size="20" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;" required maxlength="15">
 		</p>
 		<p align="center">
 		<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-20%;">密碼(6-20碼)</span><br/>
-		<input type="password" id="UserPass" name = "pwd" size="20" style="font-family: 微軟正黑體; width:40%; border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;" required>
+		<input type="password" id="UserPass" name = "pwd" size="20" style="font-family: 微軟正黑體; width:40%; border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;" required maxlength="20">
 		</p>
 		<p align="center">
-		<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-28%;">確認密碼</span><br/>
-		<input type="password" id="ConfirmPass" size="20" style="font-family: 微軟正黑體; width:40%; border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;" required>
+		<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-26%;">確認密碼</span><br/>
+		<input type="password" id="ConfirmPass" size="20" style="font-family: 微軟正黑體; width:40%; border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;" required maxlength="20">
 		</p>
 		<p align="center">
-			<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-32%;">姓名</span><br/>
-			<input type="text" name="userName" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;" required>
+			<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-15%;">姓名(最多20碼)</span><br/>
+			<input type="text" name="userName" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;" required maxlength="20">
 		</p>
 		<p align="center">
-			<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-32%;">E-mail</span><br/>
-			<input type="text" id="email" name="email" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;" required>
+			<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-11%;">E-mail(最多40碼)</span><br/>
+			<input type="text" id="email" name="email" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;" required maxlength="40">
 		</p>
 		<p align="center">
-			<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-35%;">地址</span><br/>
-			<input type="text" id="address" name="address" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;">
+			<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-17%;">地址(最多40碼)</span><br/>
+			<input type="text" id="address" name="address" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;" maxlength="40">
 		</p>
 		<p align="center">
-			<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-35%;">電話</span><br/>
-			<input type="text" name="tel" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;">
+			<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-17%;">電話(最多20碼)</span><br/>
+			<input type="text" name="tel" size="50" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:25px;" maxlength="20">
 		</p>
 		<p align="center">
-			<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-35%;">自我介紹</span><br/>
-			<textarea name="inrtoduction" cols="30" rows = "3" style="margin: 0 auto; font-family: 微軟正黑體; width:36%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:50px;"></textarea>
+			<span style="text-align:center;color:#666666; font-family: 微軟正黑體;margin-left:-5%;">自我介紹(最多100碼)</span><br/>
+			<textarea name="inrtoduction" cols="30" rows = "3" style="margin: 0 auto; font-family: 微軟正黑體; width:40%;border-radius:5px; border-style:solid; border-color:#FFAA33;height:50px;" maxlength="100"></textarea>
 		</p>
 		<div align="center">		  
 			<table>
 			<tr>   
-					<td><input type="submit" class="button2" form="form2" value="送出" /></td> 
-					<td><input type="button" class="button2" form="form2" onClick="cancelregister()" value="取消" /></td>
+					<td><input type="submit" class="button2" value="送出" /></td> 
+					<td><input type="button" class="button2" onClick="cancelregister()" value="取消" /></td>
 				</tr>
 			</table>
 		</div>
 
 	</fieldset>
-</form>	
+</form>
 <div id="theblock">
 </div>
 
