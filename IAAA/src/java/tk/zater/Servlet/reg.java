@@ -72,7 +72,7 @@ public class reg extends HttpServlet {
                         tx.commit();
                         out.println("成功");
                         sess.close();
-                        request.getRequestDispatcher("tripindex.jsp").forward(request, response);
+                        request.getRequestDispatcher("content.jsp").forward(request, response);
                     } else {
 
                         out.println("用戶名被註冊");

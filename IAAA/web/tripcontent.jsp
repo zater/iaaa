@@ -20,6 +20,17 @@
 	<script src = "js/jquery-1.11.1.min.js"></script>
 	<script>
 		$(document).ready(function(){	
+		<%
+							try {
+							String lv =  String.valueOf(request.getSession().getAttribute("userLV"));
+							String name =  String.valueOf(request.getSession().getAttribute("Username"));
+								if (name == "null") { 
+								out.print("window.location='content.jsp'");
+								}
+							} catch (Exception e) {
+								out.print("error");
+							}
+	%>
 			$.getJSON("GainInfo?id="+window.location.search.split("=")[1],function(jdata){
 			$("#Topic").html(jdata["Plan"]["Topic"]);
 			$("#UserID").html("作者："+jdata["Plan"]["UserID"]);
@@ -81,6 +92,8 @@
 					$(tag).append(tag2);
 					for(k = 0; k < flag2[j]["Annex"].length;k++) {
 						tag2 = document.createElement("img");
+						$(tag2).css("max-width","600px");
+						$(tag2).css("max-height","400px");
 						tag2.src = flag2[j]["Annex"][k];
 						$(tag).append(tag2);
 					}
@@ -108,6 +121,8 @@
 					$(tag).append(tag2);
 					for(k = 0; k < flag2[j]["Annex"].length;k++) {
 						tag2 = document.createElement("img");
+						$(tag2).css("max-width","600px");
+						$(tag2).css("max-height","400px");
 						tag2.src = flag2[j]["Annex"][k];
 						$(tag).append(tag2);
 					}
@@ -129,6 +144,8 @@
 					$(tag).append(tag2);
 					for(k = 0; k < flag2[j]["Annex"].length;k++) {
 						tag2 = document.createElement("img");
+						$(tag2).css("max-width","600px");
+						$(tag2).css("max-height","400px");
 						tag2.src = flag2[j]["Annex"][k];
 						$(tag).append(tag2);
 					}
@@ -195,7 +212,7 @@
 								if ("5".equals(lv)) { %>	
 								<input type="button" onclick="gopass()" value="審核通過">
 							<% } else if(name != "null"){	%>	
-								<input type="button" value="購買">
+								<input type="button" value="購買" style="width:300%">
 	<%	 } else {
 								
 								}								
