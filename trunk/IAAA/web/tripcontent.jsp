@@ -15,10 +15,12 @@
 		#content {margin-left:20%}
 		.daytitle {color:blue}
 		.memotitle {color:green}
-		body>div{position:absolute;top:0px;z-index:2;padding-left:90%}
+		body>div{position:absolute;top:0px;z-index:2;padding-left:80%}
+		aside{position:absolute;z-index:2}
 	</style>
 	<script src = "js/jquery-1.11.1.min.js"></script>
 	<script>
+		var subid;
 		$(document).ready(function(){	
 		<%
 							try {
@@ -31,7 +33,13 @@
 								out.print("error");
 							}
 	%>
+		
+			$("aside").hide();
+			$("aside").css('top',$(window).height()*0.1);
+			$("aside").css('right',$(window).width()*0.1);
+			$("input[type=button]").css("width","200%");
 			$.getJSON("GainInfo?id="+window.location.search.split("=")[1],function(jdata){
+			subid = window.location.search.split("=")[1];
 			$("#Topic").html(jdata["Plan"]["Topic"]);
 			$("#UserID").html("作者："+jdata["Plan"]["UserID"]);
 			$("#plantype").html("主題："+jdata["Plan"]["plantype"]);
@@ -58,6 +66,7 @@
 			for(i = 0; i < jdata["memo"].length;i++) {
 				flag = jdata["memo"][i];
 				tag = document.createElement("div");
+				$(tag).hide();
 				tag.id = "Day"+flag["Day"];
 				tag2 = document.createElement("p");
 				tag2.innerHTML = "第" + (i+1) + "天";
@@ -165,8 +174,6 @@
 									$.ajax({
 			url: 'SetGone?id='+window.location.search.split("=")[1],  //Server script to process data
 			type: 'GET'
-
-			
 		});
 								
 									
@@ -182,7 +189,27 @@
 								out.print("error");
 							}
 	%>
+	function buy(){
+		$("#content div").show();
+		$("input:first").remove();
+	}
 	
+	function setscore(){
+		$("aside").show();
+	}
+	function subscore(){
+		
+		
+				$.ajax({
+			url: 'SetValue?id='+ subid+'&score='+$("select").val(),  //Server script to process data
+			type: 'GET',
+			success: function(){
+				$("aside").remove();
+				$("input:last").remove();
+			}
+			
+		});
+	}
 	</script>
 </head>
 <body>
@@ -212,7 +239,8 @@
 								if ("5".equals(lv)) { %>	
 								<input type="button" onclick="gopass()" value="審核通過">
 							<% } else if(name != "null"){	%>	
-								<input type="button" value="購買" style="width:300%">
+								<input type="button" value="購買" onclick="buy()">
+								<input type="button" value="評價" onclick="setscore()">
 	<%	 } else {
 								
 								}								
@@ -221,5 +249,15 @@
 							}
 	%>
 	</div>
+	<aside>
+		<select>
+			<option value='1'>一星等</option>
+			<option value='2'>二星等</option>
+			<option value='3'>三星等</option>
+			<option value='4'>四星等</option>
+			<option value='5'>五星等</option>
+		</select>
+		<input type="button" value="送出" onclick="subscore()">
+	</aside>
 </body>
 </html>
